@@ -1,6 +1,5 @@
 package app;
 
-import commands.Reader;
 import person.*;
 import java.time.LocalDateTime;
 import java.util.Scanner;
@@ -11,11 +10,8 @@ public class Creator {
     Reader reader;
     private Person p;
 
-    private Scanner scaner;
-
     public Creator(App app){
         this.app = app;
-        this.scaner = app.scan;
     }
 
     public Person createPerson(long id, Reader reader){
@@ -232,5 +228,10 @@ public class Creator {
                 System.out.println("Увы, Z есть всегда");
             }
         }
+    }
+
+
+    public String WaitData(){
+        return "";
     }
 }

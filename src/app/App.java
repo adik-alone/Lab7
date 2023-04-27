@@ -1,42 +1,55 @@
 package app;
 
-import commands.Reader;
 import exception.ScriptRecursionException;
 import person.Person;
 
 import java.io.FileNotFoundException;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.NoSuchElementException;
 import java.util.Scanner;
 
 public class App {
-    Scanner scan;
     CommandManager comMan;
     boolean work;
     String new_line;
-
     Creator creator;
-
     ScriptExecuter scriptExecuter;
-
     Consol consol;
+    Reader reader;
+    SingleLine singleLine;
     int mod = 0; // 0 --- консоль |||| 1 --- скрипт
-    public App(){}
     public void start(CommandManager cm){
-        scan = new Scanner(System.in);
         creator = new Creator(this);
-        consol = new Consol(scan);
+        consol = new Consol(new Scanner(System.in));
         comMan = cm;
         scriptExecuter = new ScriptExecuter();
+        singleLine = new SingleLine();
         work = true;
+        reader = consol;
         while (work){
             waitCommand();
         }
     }
     public void waitCommand(){
-        new_line = scan.nextLine().trim();
-        GetCommand(new_line);
-        if (new_line.equals("exit")) this.finish();
+        try {
+            new_line = reader.WaitData();
+            if (new_line.equals("")){}
+            else{
+                singleLine.NewLine(new_line);
+                if(singleLine.Hangdling()){
+                    Reader reader1 = reader;
+                    ChangeToSingleLine();
+                    GetCommand(reader.WaitData());
+                    ChangeReader(reader1);
+                }else {
+                    GetCommand(new_line);
+                }
+            }
+            if (new_line.equals("exit")) finish();
+        }catch (NoSuchElementException e){
+            System.out.println("Экстренный выход");
+            finish();
+        }
+
     }
     public void GetCommand(String Line){
         try{
@@ -47,47 +60,57 @@ public class App {
     }
     public void finish(){
         work = false;
-        scan.close();
+        consol.CloseStream();
+    }
+    public void ChangeToScripte(){
+        reader = scriptExecuter;
+    }
+    public void ChangeToConsol(){
+        reader = consol;
+    }
+
+    public void ChangeReader(Reader r){
+        reader = r;
+    }
+
+    public void ChangeToSingleLine(){
+        reader = singleLine;
     }
 
     public Person createPerson(long id){
-        if (mod == 0){
-            return creator.createPerson(id, consol);
-        }else{
-            return creator.createPerson(id, scriptExecuter);
-        }
-
+        return creator.createPerson(id, reader);
     }
 
-
-
     public void execute(){
-        Reader reader;
-        if (mod == 1){
-            reader = scriptExecuter;
-        }else{
-            reader = consol;
-        }
+//        Reader reader;
+//        if (mod == 1){
+//            reader = scriptExecuter;
+//        }else{
+//            reader = consol;
+//        }
         while(true) {
             try {
                 System.out.println("Введите путь до файла:");
                 String file_name = reader.WaitData();
                 scriptExecuter.openFile(file_name);
-                mod = 1;
+                ChangeToScripte();
                 while (scriptExecuter.Work()) {
-                    String line = scriptExecuter.execute();
-                    GetCommand(line);
+                    String line = scriptExecuter.WaitData();
+                    if (line.equals("")){}
+                    else {
+                        GetCommand(line);
+                    }
                 }
                 scriptExecuter.CloseScaner();
                 if (scriptExecuter.ls.size() == 0){
-                    mod = 0;
+                    ChangeToConsol();
                 }
                 scriptExecuter.RemoveLast();
                 break;
             } catch (FileNotFoundException e) {
                 System.out.println("Такого файла не существует попробуйте снова");
             }catch (ScriptRecursionException e){
-                System.out.println("Вы нарушили очень важный закон, который гласит: \"Не стоит делть рекурсию, иначе кара будет ужасна\". Ну и собственно, кара ужасна.");
+                System.out.println("Вы нарушили очень важный закон, который гласит: \"Не стоит делть рекурсию, иначе кара будет ужасна\"");
                 System.out.println("Ладно, можете вводить команды, я не настолько жесток");
                 break;
             }

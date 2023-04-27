@@ -1,6 +1,5 @@
 package app;
 
-import commands.Reader;
 import exception.ScriptRecursionException;
 
 import java.io.File;
@@ -13,17 +12,10 @@ public class ScriptExecuter implements Reader {
 
     List<String> list = new ArrayList<>();
     List<Scanner> ls = new ArrayList<>();
-
     String filename;
     Scanner scanner;
 
     public String WaitData(){
-        String line = ls.get(ls.size() - 1).nextLine();
-        System.out.println(line);
-        return line;
-    }
-
-    public String execute(){
         String line = ls.get(ls.size() - 1).nextLine();
         System.out.println(line);
         return line;

@@ -45,10 +45,16 @@ public class CollectionManager {
         if(set.isEmpty()){
             System.out.println("collection is empty");
         }else{
-            System.out.println(set);
+//            System.out.println(set);
+            showCollection();
         }
-
         System.out.println("+++SUCSESS+++");
+    }
+
+    private void showCollection(){
+        for (Person p: set){
+            System.out.println(p);
+        }
     }
 
     public void Info(){

@@ -1,7 +1,5 @@
 package app;
 
-import commands.Reader;
-
 import java.util.Scanner;
 
 public class Consol implements Reader {
@@ -16,5 +14,9 @@ public class Consol implements Reader {
         String line;
         line = scanner.nextLine().trim();
         return line;
+    }
+
+    public void CloseStream(){
+        scanner.close();
     }
 }
