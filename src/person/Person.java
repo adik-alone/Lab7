@@ -75,27 +75,38 @@ public class Person implements Comparable<Person>{
             this.hairColor = ColorHair.valueOf(hairColor);
         }
     }
-
-
     public void setLocation(Location location) {
         this.location = location;
     }
 
 
-    public Coordinates getCoordinates() {
-        return coordinates;
+    public LocalDateTime getBirthday() {
+        return birthday;
+    }
+    public long getId() {
+        return id;
+    }
+    public String getName() {
+        return name;
+    }
+    public double getHeight() {
+        return height;
+    }
+    public LocalDateTime getCreationDate() {
+        return creationDate;
+    }
+    public ColorEye getEyeColor() {
+        return eyeColor;
+    }
+    public ColorHair getHairColor() {
+        return hairColor;
     }
 
     public Location getLocation() {
         return location;
     }
-
-    public LocalDateTime getBirthday() {
-        return birthday;
-    }
-
-    public long getId() {
-        return id;
+    public Coordinates getCoordinates() {
+        return coordinates;
     }
 }
 

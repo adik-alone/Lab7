@@ -10,13 +10,16 @@ import java.util.Scanner;
 public class App {
     CommandManager comMan;
     boolean work;
-    String new_line;
+    String line;
     Creator creator;
     ScriptExecuter scriptExecuter;
     Consol consol;
     Reader reader;
     SingleLine singleLine;
+    XmlWorker xmlworker;
     int mod = 0; // 0 --- консоль |||| 1 --- скрипт
+
+    //блок инициализации
     public void start(CommandManager cm){
         creator = new Creator(this);
         consol = new Consol(new Scanner(System.in));
@@ -25,31 +28,24 @@ public class App {
         singleLine = new SingleLine();
         work = true;
         reader = consol;
+
+        xmlworker = new XmlWorker("Collection.xml");
+        xmlworker.parse();
         while (work){
-            waitCommand();
+            Work();
         }
     }
-    public void waitCommand(){
-        try {
-            new_line = reader.WaitData();
-            if (new_line.equals("")){}
+    public void Work(){
+        try{
+            line = reader.WaitData();
+            if (line.equals("")){}
             else{
-                singleLine.NewLine(new_line);
-                if(singleLine.Hangdling()){
-                    Reader reader1 = reader;
-                    ChangeToSingleLine();
-                    GetCommand(reader.WaitData());
-                    ChangeReader(reader1);
-                }else {
-                    GetCommand(new_line);
-                }
+                GetCommand(line);
             }
-            if (new_line.equals("exit")) finish();
         }catch (NoSuchElementException e){
             System.out.println("Экстренный выход");
             finish();
         }
-
     }
     public void GetCommand(String Line){
         try{
@@ -62,19 +58,9 @@ public class App {
         work = false;
         consol.CloseStream();
     }
-    public void ChangeToScripte(){
-        reader = scriptExecuter;
-    }
-    public void ChangeToConsol(){
-        reader = consol;
-    }
 
     public void ChangeReader(Reader r){
         reader = r;
-    }
-
-    public void ChangeToSingleLine(){
-        reader = singleLine;
     }
 
     public Person createPerson(long id){
@@ -82,18 +68,12 @@ public class App {
     }
 
     public void execute(){
-//        Reader reader;
-//        if (mod == 1){
-//            reader = scriptExecuter;
-//        }else{
-//            reader = consol;
-//        }
         while(true) {
             try {
                 System.out.println("Введите путь до файла:");
                 String file_name = reader.WaitData();
                 scriptExecuter.openFile(file_name);
-                ChangeToScripte();
+                ChangeReader(scriptExecuter);
                 while (scriptExecuter.Work()) {
                     String line = scriptExecuter.WaitData();
                     if (line.equals("")){}
@@ -103,7 +83,7 @@ public class App {
                 }
                 scriptExecuter.CloseScaner();
                 if (scriptExecuter.ls.size() == 0){
-                    ChangeToConsol();
+                    ChangeReader(consol);
                 }
                 scriptExecuter.RemoveLast();
                 break;

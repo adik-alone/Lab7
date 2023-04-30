@@ -29,4 +29,11 @@ public class Coordinates {
                 ", y=" + y +
                 '}';
     }
+
+    public Long getX() {
+        return x;
+    }
+    public Double getY() {
+        return y;
+    }
 }

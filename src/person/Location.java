@@ -27,4 +27,15 @@ public class Location {
     public String toString() {
         return "Икс: " + x + " Игрек: " + y + " Зэд: " + z;
     }
+
+
+    public int getX(){
+        return x;
+    }
+    public double getY() {
+        return y;
+    }
+    public Double getZ() {
+        return z;
+    }
 }

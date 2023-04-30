@@ -4,11 +4,9 @@ Script1
 info
 
 
-execute_script
-Script2
+execute_script Script2
 
 info
 show
 
-execute_script
-Script3
+execute_script Script3

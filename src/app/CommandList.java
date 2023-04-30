@@ -25,16 +25,16 @@ public class CommandList {
         CreateCommand("help", new HelpCommand());
         CreateCommand("info", new InfoCommand());
         CreateCommand("show", new ShowCommand());
-        CreateCommand("add", new AddCommand());
-//        CreateCommand("update", new UpdateCommand());
-//        CreateCommand("remove_by_id", new RemoveBYidCommand());
+        CreateCommand("add", new AddCommand()); // ожидает данные
+//        CreateCommand("update", new UpdateCommand()); //ожидает данные
+//        CreateCommand("remove_by_id", new RemoveBYidCommand()); //ожидает данные
         CreateCommand("clear", new ClearCommand());
-//        CreateCommand("save", new SaveCommand());
-        CreateCommand("execute_script", new ExecuteScriptCommand());
+        CreateCommand("save", new SaveCommand());
+        CreateCommand("execute_script", new ExecuteScriptCommand()); //ожидает данные
         CreateCommand("exit", new ExitCommand());
-//        CreateCommand("add_if_max", new AddIFmaxCommand());
-//        CreateCommand("add_if_min", new AddIFminCommand());
-//        CreateCommand("remove_lower", new RemoveLowerCommand());
+//        CreateCommand("add_if_max", new AddIFmaxCommand()); //ожидает данные
+//        CreateCommand("add_if_min", new AddIFminCommand()); //ожидает данные
+//        CreateCommand("remove_lower", new RemoveLowerCommand()); //ожидает данные
 //        CreateCommand("average_of_height", new AverageOFheightCommand());
 //        CreateCommand("max_by_height", new MaxBYheightCommand());
 //        CreateCommand("print_descending", new PrintDescendingCommand());
@@ -48,6 +48,6 @@ public class CommandList {
         for (String s: keys){
             commandMap.get(s).info();
         }
-        System.out.println("+++SUCSESS+++");
+        System.out.println("+++SUCCESS+++");
     }
 }

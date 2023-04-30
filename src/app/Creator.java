@@ -229,8 +229,6 @@ public class Creator {
             }
         }
     }
-
-
     public String WaitData(){
         return "";
     }
