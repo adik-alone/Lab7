@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<PersonCollection>
+    <Person>
+        <id>1</id>
+        <name>Jhon</name>
+        <Coordinates>
+            <x_ccordinates>5</x_ccordinates>
+            <y_coordinates>5</y_coordinates>
+        </Coordinates>
+        <CreationDate>2023-04-30T00:59</CreationDate>
+        <height>1.65</height>
+        <birthday>2023-04-30T00:00</birthday>
+        <EyeColor>red</EyeColor>
+        <HairColor>red</HairColor>
+        <Location>
+            <location_x>1</location_x>
+            <location_y>1</location_y>
+            <location_z>1</location_z>
+        </Location>
+    </Person>
+</PersonCollection>
