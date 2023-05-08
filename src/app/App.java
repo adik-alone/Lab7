@@ -27,20 +27,31 @@ public class App {
         scriptExecuter = new ScriptExecuter();
         singleLine = new SingleLine();
         work = true;
-        reader = consol;
-
-        xmlworker = new XmlWorker("Collection.xml");
+        String filename = System.getenv("PATH_COLLECTION");
+        xmlworker = new XmlWorker(filename);
         xmlworker.parse();
+        reader = xmlworker;
+        comMan.commandList.col_manager.createCollection();
+        reader = consol;
         while (work){
             Work();
         }
     }
+
     public void Work(){
         try{
-            line = reader.WaitData();
-            if (line.equals("")){}
-            else{
-                GetCommand(line);
+            if(reader.Work()) {
+                line = reader.WaitData().trim();
+                if (line.equals("")) {
+                } else {
+                    if (singleLine.Check(line)){
+                        ChangeReader(singleLine);
+                        line = singleLine.WaitData();
+                    }
+                    GetCommand(line);
+                }
+            }else{
+                ChangeReader(consol);
             }
         }catch (NoSuchElementException e){
             System.out.println("Экстренный выход");
@@ -58,42 +69,38 @@ public class App {
         work = false;
         consol.CloseStream();
     }
-
     public void ChangeReader(Reader r){
         reader = r;
     }
 
+    public Person creationStartPerson() {
+        return creator.createPerson(reader);
+    }
+
+//    ------------------
+//    исполнители команд
+//    ------------------
     public Person createPerson(long id){
         return creator.createPerson(id, reader);
     }
 
-    public void execute(){
-        while(true) {
-            try {
-                System.out.println("Введите путь до файла:");
-                String file_name = reader.WaitData();
-                scriptExecuter.openFile(file_name);
-                ChangeReader(scriptExecuter);
-                while (scriptExecuter.Work()) {
-                    String line = scriptExecuter.WaitData();
-                    if (line.equals("")){}
-                    else {
-                        GetCommand(line);
-                    }
-                }
-                scriptExecuter.CloseScaner();
-                if (scriptExecuter.ls.size() == 0){
-                    ChangeReader(consol);
-                }
-                scriptExecuter.RemoveLast();
-                break;
-            } catch (FileNotFoundException e) {
-                System.out.println("Такого файла не существует попробуйте снова");
-            }catch (ScriptRecursionException e){
-                System.out.println("Вы нарушили очень важный закон, который гласит: \"Не стоит делть рекурсию, иначе кара будет ужасна\"");
-                System.out.println("Ладно, можете вводить команды, я не настолько жесток");
-                break;
-            }
+    public void executeScript(){
+        try {
+            System.out.println("Введите путь до файла");
+            String file_name = reader.WaitData();
+            scriptExecuter.openFile(file_name);
+            ChangeReader(scriptExecuter);
+        } catch (FileNotFoundException e) {
+            System.out.println("Такого файла не существует попробуйте снова");
+        }catch (ScriptRecursionException e){
+            System.out.println("Вы создали рекурсию скриптов. Сейчас я смог с этим справиться, но впредь не стоит так делать!");
         }
     }
+
+
+    public void remove(){
+
+    }
+//
+
 }

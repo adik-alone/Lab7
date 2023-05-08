@@ -3,8 +3,9 @@ package person;
 import exception.*;
 
 import java.time.LocalDateTime;
+import java.util.Comparator;
 
-public class Person implements Comparable<Person>{
+public class Person implements Comparable<Person>, Comparator<Person> {
     private long id; //Значение поля должно быть больше 0, Значение этого поля должно быть уникальным, Значение этого поля должно генерироваться автоматически
     private String name; //Поле не может быть null, Строка не может быть пустой
     private Coordinates coordinates; //Поле не может быть null
@@ -18,6 +19,11 @@ public class Person implements Comparable<Person>{
     @Override
     public int compareTo(Person o) {
         return (int)(this.id - o.id);
+    }
+
+    @Override
+    public int compare(Person o1, Person o2) {
+        return (int) (o1.getHeight() - o2.getHeight());
     }
 
 //    public Person(long id, String name, double height, ColorEye eye, ColorHair hair, LocalDateTime birthday, long x, double y, int XL, double YL, Double ZL) throws NotBeNullException {
@@ -36,12 +42,13 @@ public class Person implements Comparable<Person>{
         this.id = id;
         this.creationDate = LocalDateTime.now();
     }
+    public Person(){}
 
 
     @Override
     public String toString() {
-        return "id: " + id + " имя: " + name + " рост: " + height + " цвет глаз: " + eyeColor + " цвет волос: " + hairColor +
-                " Дата рождения: " + birthday + " Координаты: " + coordinates + " Координаты локации: " + location + " Время создания: " + creationDate;
+        return "id: " + id + "\n" + "имя: " + name + "\n" + "рост: " + height + "\n" + "цвет глаз: " + eyeColor + "\n" + "цвет волос: " + hairColor + "\n" +
+                "Дата рождения: " + birthday + "\n" + "Координаты: " + coordinates + "\n" + "Координаты локации: " + location + "\n" + "Время создания: " + creationDate;
     }
 
     public void setName(String name) throws NotBeNullException {
@@ -69,7 +76,7 @@ public class Person implements Comparable<Person>{
     }
 
     public void setHairColor(String hairColor) {
-        if (hairColor.equals("")){
+        if (hairColor.equals("") | hairColor.equals("NULL")){
             this.hairColor = null;
         }else {
             this.hairColor = ColorHair.valueOf(hairColor);
@@ -79,6 +86,12 @@ public class Person implements Comparable<Person>{
         this.location = location;
     }
 
+    public void setCreationDate(LocalDateTime creationDate) {
+        this.creationDate = creationDate;
+    }
+    public void setId(long id) {
+        this.id = id;
+    }
 
     public LocalDateTime getBirthday() {
         return birthday;
@@ -108,5 +121,7 @@ public class Person implements Comparable<Person>{
     public Coordinates getCoordinates() {
         return coordinates;
     }
+
+
 }
 

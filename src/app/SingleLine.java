@@ -16,13 +16,16 @@ public class SingleLine implements Reader{
         now = 0;
     }
 
-    public boolean Hangdling(){
-        if (line.length > 1) return true;
+    public boolean Check(String s){
+        NewLine(s);
+        if (line.length > 1){
+            return true;
+        }
         return false;
     }
 
-    public void Work(){
-        boolean a = Hangdling();
+    public boolean Work(){
+        return (line.length - now > 1);
     }
 
     public void TrueArray(int a) throws EndOfLineEcxeption {

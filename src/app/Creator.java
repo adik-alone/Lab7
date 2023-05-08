@@ -26,7 +26,24 @@ public class Creator {
         LocationAsker();
         return p;
     }
+    public Person createPerson(Reader reader){
+        this.reader = reader;
+        p = new Person(); // app.comMan.commandList.col_manager.set.last().getId() + 1
+        IdAsker();
+        NameAsk();
+        CoordinatesAsker();
+        CreationDateAsker();
+        HeightAsker();
+        BirthdayAsker2();
+        EyeColorAsker();
+        HairColorAsker();
+        LocationAsker();
+        return p;
+    }
 
+    private void IdAsker(){
+        p.setId(Long.parseLong(reader.WaitData()));
+    }
     public void NameAsk(){  
         while (true){
             try{
@@ -89,6 +106,14 @@ public class Creator {
                 System.out.println("ну вы чего");
             }
         }
+    }
+
+    private void CreationDateAsker(){
+        p.setCreationDate(LocalDateTime.parse(reader.WaitData()));
+    }
+
+    private void BirthdayAsker2(){
+        p.setBirthday(LocalDateTime.parse(reader.WaitData()));
     }
 
     private void BirthdayAsker(){
@@ -209,7 +234,7 @@ public class Creator {
         while (true){
             try{
                 System.out.println("Введите коориднату Y локации:");
-                location.setY(Integer.parseInt(reader.WaitData().trim()));
+                location.setY(Double.parseDouble(reader.WaitData().trim()));
                 break;
             }catch (NumberFormatException e){
                 System.out.println("Цифры выглядят не так");

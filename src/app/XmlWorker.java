@@ -10,27 +10,42 @@ import javax.print.Doc;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
+import javax.xml.stream.XMLInputFactory;
+import javax.xml.transform.Transformer;
+import javax.xml.transform.TransformerException;
+import javax.xml.transform.TransformerFactory;
 import javax.xml.transform.TransformerFactoryConfigurationError;
-import java.io.IOException;
+import javax.xml.transform.dom.DOMSource;
+import javax.xml.transform.stream.StreamResult;
+import java.io.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.TreeSet;
 
-public class XmlWorker {
+public class XmlWorker implements Reader{
+
+    List<String> outLines = new ArrayList<>();
+    int now_line = 0;
+
+    public int amount;
+
 
     public XmlWorker(String name){
         filename = name;
     }
     String filename;
 
-    public Document prepare(){
+    Document document = null;
+
+    public void prepare(){
         try{
+            XMLInputFactory input = XMLInputFactory.newInstance();
             DocumentBuilder documentBuilder = DocumentBuilderFactory.newNSInstance().newDocumentBuilder();
 
-            Document document = documentBuilder.parse(filename);
-
-            return document;
+            document = documentBuilder.parse(filename);
 
         }catch (ParserConfigurationException e) {
             e.printStackTrace(System.out);
-            return null;
         } catch (IOException e) {
             throw new RuntimeException(e);
         } catch (SAXException e) {
@@ -41,18 +56,18 @@ public class XmlWorker {
         return (n.getNodeType() != Node.TEXT_NODE);
     }
 //  Для парсинга полей-классов
-    public static void getSomthingBig(Node n){
+    public void getSomthingBig(Node n){
         NodeList pols = n.getChildNodes();
         for (int i = 0; i < pols.getLength(); i++){
             Node pol = pols.item(i);
             if (pol.getNodeType() != Node.TEXT_NODE){
-                System.out.println(pol.getNodeName() + ":" + pol.getChildNodes().item(0).getTextContent());
+                outLines.add(pol.getChildNodes().item(0).getTextContent());
             }
         }
     }
 
     public void parse(){
-        Document document = prepare();
+        prepare();
         Node root = document.getDocumentElement();
 
         NodeList persons = root.getChildNodes();
@@ -72,7 +87,7 @@ public class XmlWorker {
                         getSomthingBig(personProperty);
                     } else {
                         if (nodeTrier(personProperty)) {
-                            System.out.println(personProperty.getNodeName() + ":" + personProperty.getChildNodes().item(0).getTextContent());
+                            outLines.add(personProperty.getChildNodes().item(0).getTextContent());
                         }
                     }
                 }
@@ -83,7 +98,6 @@ public class XmlWorker {
 
 
     public void addNewPerson(Person p)throws TransformerFactoryConfigurationError, DOMException {
-        Document document = prepare();
         Node root = document.getDocumentElement();
 
         Element person = document.createElement("Person");
@@ -94,7 +108,7 @@ public class XmlWorker {
         Element height = document.createElement("height");
         Element birthday = document.createElement("birthday");
         Element eyecolor = document.createElement("EyeColor");
-        Element haircolor = document.createElement("HfirColor");
+        Element haircolor = document.createElement("HairColor");
         Element location = document.createElement("Location");
 
         Element coordinates_x = document.createElement("coordinates_x");
@@ -137,8 +151,70 @@ public class XmlWorker {
         person.appendChild(location);
 
         root.appendChild(person);
-
-
     }
 
+
+    public void save(TreeSet<Person> set) throws IOException {
+        int l = set.size();
+        for (int i = 0; i< 10; i++){
+            ClearDOM(document);
+        }
+
+        for (Person p: set){
+            addNewPerson(p);
+        }
+        writeDocument(document);
+    }
+
+    public void writeDocument(Document document) throws TransformerFactoryConfigurationError{
+        try{
+            Transformer tr = TransformerFactory.newInstance().newTransformer();
+            DOMSource source = new DOMSource(document);
+            System.out.println(source);
+            BufferedWriter bf = new BufferedWriter (new FileWriter("Collection.xml"));
+            StreamResult result = new StreamResult(bf);
+            tr.transform(source, result);
+        }catch (TransformerException | IOException e){
+            e.printStackTrace(System.out);
+        }
+    }
+    public void ClearDOM(Document document) throws IOException {
+        Node root = document.getDocumentElement();
+        System.out.println(root);
+//        for(int i = 0; i< root.getChildNodes().getLength(); i++){
+//            System.out.println(root.getChildNodes().item(i));
+//        }
+//        System.out.println("_______________________________________");
+//        System.out.println(root.getChildNodes().getLength());
+        for(int i = 0; i < root.getChildNodes().getLength(); i++){
+            if (root.hasChildNodes()){
+                root.removeChild(root.getChildNodes().item(i));
+            }
+        }
+//        System.out.println(root);
+//        for(int i = 0; i< root.getChildNodes().getLength(); i++){
+//            System.out.println(root.getChildNodes().item(i));
+//        }
+    }
+
+    public void HowMany(){
+        amount = (int)(outLines.size()/12);
+    }
+    @Override
+    public boolean Work() {
+        if (outLines.size() - now_line > 1) {
+            return true;
+        }
+        return false;
+    }
+
+    @Override
+    public String WaitData() {
+        now_line += 1;
+        return outLines.get(now_line - 1);
+    }
+
+    public Document getDocument() {
+        return document;
+    }
 }

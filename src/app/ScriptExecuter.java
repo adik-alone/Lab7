@@ -1,5 +1,6 @@
 package app;
 
+import exception.RangeException;
 import exception.ScriptRecursionException;
 
 import java.io.File;
@@ -10,35 +11,47 @@ import java.util.Scanner;
 
 public class ScriptExecuter implements Reader {
 
-    List<String> list = new ArrayList<>();
-    List<Scanner> ls = new ArrayList<>();
+    List<String> listName = new ArrayList<>();
+    List<Scanner> listScanner = new ArrayList<>();
     String filename;
     Scanner scanner;
 
     public String WaitData(){
-        String line = ls.get(ls.size() - 1).nextLine();
+        String line = listScanner.get(listScanner.size() - 1).nextLine();
+//        String line = scanner.nextLine();
         System.out.println(line);
         return line;
     }
 
-    public Boolean Work() throws IndexOutOfBoundsException{
-        return ls.get(ls.size() - 1).hasNext();
+    public boolean Work() throws IndexOutOfBoundsException{
+        if(!listScanner.get(listScanner.size() - 1).hasNext()){
+            if(listScanner.size() == 1){
+                RemoveLast();
+                CloseScaner();
+                return false;
+            }else{
+                RemoveLast();
+                CloseScaner();
+                return true;
+            }
+        }
+        return true;
     }
 
     public void openFile(String filename) throws FileNotFoundException, ScriptRecursionException {
         this.filename = filename;
-        if (list.contains(filename)) throw new ScriptRecursionException();
-        list.add(filename);
+        if (listName.contains(filename)) throw new ScriptRecursionException();
+        listName.add(filename);
         scanner = new Scanner(new File(filename));
-        ls.add(scanner);
+        listScanner.add(scanner);
     }
 
     public void CloseScaner(){
-        ls.remove(ls.size()-1);
+        listScanner.remove(listScanner.size()-1);
     }
 
     public void RemoveLast(){
-        list.remove(list.size() - 1);
+        listName.remove(listName.size() - 1);
     }
 
 }
