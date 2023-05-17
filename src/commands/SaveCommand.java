@@ -12,8 +12,8 @@ public class SaveCommand implements Command{
     }
 
     @Override
-    public void info() {
-        System.out.println("save : сохранить коллекцию в файл");
+    public String info() {
+        return "save : сохранить коллекцию в файл";
     }
 
     @Override

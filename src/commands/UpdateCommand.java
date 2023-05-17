@@ -10,8 +10,8 @@ public class UpdateCommand implements Command {
     }
 
     @Override
-    public void info() {
-        System.out.println("update id {element} : обновить значение элемента коллекции, id которого равен заданному");
+    public String info() {
+        return "update id {element} : обновить значение элемента коллекции, id которого равен заданному";
     }
 
     @Override

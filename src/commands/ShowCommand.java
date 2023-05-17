@@ -13,8 +13,8 @@ public class ShowCommand implements Command {
     }
 
     @Override
-    public void info() {
-        System.out.println("show : вывести в стандартный поток вывода все элементы коллекции в строковом представлении");
+    public String info() {
+        return "show : вывести в стандартный поток вывода все элементы коллекции в строковом представлении";
     }
 
     @Override
