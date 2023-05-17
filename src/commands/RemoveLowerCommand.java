@@ -9,8 +9,8 @@ public class RemoveLowerCommand implements Command {
         list.col_manager.removeLower();
     }
     @Override
-    public void info() {
-        System.out.println("remove_lower {element} : удалить из коллекции все элементы, меньшие, чем заданный");
+    public String info() {
+        return "remove_lower {element} : удалить из коллекции все элементы, меньшие, чем заданный";
     }
     @Override
     public void addToList(CommandList l) {

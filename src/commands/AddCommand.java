@@ -14,8 +14,8 @@ public class AddCommand implements Command {
     }
 
     @Override
-    public void info() {
-        System.out.println("add {element} : добавить новый элемент в коллекцию");
+    public String info() {
+        return "add {element} : добавить новый элемент в коллекцию";
     }
     @Override
     public void addToList(CommandList l) {

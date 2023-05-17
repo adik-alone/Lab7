@@ -11,8 +11,8 @@ public class RemoveBYidCommand implements Command {
     }
 
     @Override
-    public void info() {
-        System.out.println("remove_by_id id : удалить элемент из коллекции по его id");
+    public String info() {
+        return "remove_by_id id : удалить элемент из коллекции по его id";
     }
 
     @Override

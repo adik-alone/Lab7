@@ -6,7 +6,7 @@ public interface Command {
 
     void execute();
 
-    void info();
+    String info();
 
     void addToList(CommandList l);
 }

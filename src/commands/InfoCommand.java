@@ -12,8 +12,8 @@ public class InfoCommand implements Command{
     }
 
     @Override
-    public void info() {
-        System.out.println("info : вывести в стандартный поток вывода информацию о коллекции");
+    public String info() {
+        return "info : вывести в стандартный поток вывода информацию о коллекции";
     }
 
     @Override

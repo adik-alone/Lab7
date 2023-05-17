@@ -10,8 +10,8 @@ public class AddIFmaxCommand implements Command {
     }
 
     @Override
-    public void info() {
-        System.out.println("add_if_max {element} : добавить новый элемент в коллекцию, если его значение больше, чем у наибольшего элемента этой коллекции");
+    public String info() {
+        return "add_if_max {element} : добавить новый элемент в коллекцию, если его значение больше, чем у наибольшего элемента этой коллекции";
     }
 
     @Override

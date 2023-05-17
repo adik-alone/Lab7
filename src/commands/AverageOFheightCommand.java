@@ -10,8 +10,8 @@ public class AverageOFheightCommand implements Command {
     }
 
     @Override
-    public void info() {
-        System.out.println("average_of_height : вывести среднее значение поля height для всех элементов коллекции");
+    public String info() {
+        return "average_of_height : вывести среднее значение поля height для всех элементов коллекции";
     }
 
     @Override

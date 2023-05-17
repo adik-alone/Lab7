@@ -10,8 +10,8 @@ public class PrintDescendingCommand implements Command {
     }
 
     @Override
-    public void info() {
-        System.out.println("print_descending : вывести элементы коллекции в порядке убывания");
+    public String info() {
+        return "print_descending : вывести элементы коллекции в порядке убывания";
     }
 
     @Override

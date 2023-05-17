@@ -12,8 +12,8 @@ public class ExitCommand implements Command{
     }
 
     @Override
-    public void info() {
-        System.out.println("exit : завершить программу (без сохранения в файл)");
+    public String info() {
+        return "exit : завершить программу (без сохранения в файл)";
     }
 
     @Override

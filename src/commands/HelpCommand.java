@@ -13,8 +13,8 @@ public class HelpCommand implements Command {
     }
 
     @Override
-    public void info() {
-        System.out.println("help : вывести справку по доступным командам");
+    public String info() {
+        return "help : вывести справку по доступным командам";
     }
 
     @Override

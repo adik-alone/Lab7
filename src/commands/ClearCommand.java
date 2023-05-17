@@ -13,8 +13,8 @@ public class ClearCommand implements Command {
     }
 
     @Override
-    public void info() {
-        System.out.println("clear : очистить коллекцию");
+    public String info() {
+        return "clear : очистить коллекцию";
     }
 
     @Override

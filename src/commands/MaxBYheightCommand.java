@@ -10,8 +10,8 @@ public class MaxBYheightCommand implements Command {
     }
 
     @Override
-    public void info() {
-        System.out.println("max_by_height : вывести любой объект из коллекции, значение поля height которого является максимальным");
+    public String info() {
+        return "max_by_height : вывести любой объект из коллекции, значение поля height которого является максимальным";
     }
 
     @Override

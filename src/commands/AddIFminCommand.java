@@ -10,8 +10,8 @@ public class AddIFminCommand implements Command {
     }
 
     @Override
-    public void info() {
-        System.out.println("add_if_min {element} : добавить новый элемент в коллекцию, если его значение меньше, чем у наименьшего элемента этой коллекции");
+    public String info() {
+        return "add_if_min {element} : добавить новый элемент в коллекцию, если его значение меньше, чем у наименьшего элемента этой коллекции";
     }
 
     @Override

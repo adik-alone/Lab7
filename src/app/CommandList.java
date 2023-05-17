@@ -17,7 +17,7 @@ public class CommandList {
         this.col_manager = col_manager;
     }
 
-    public void CreateCommand (String name, Command command){
+    private void CreateCommand (String name, Command command){
         commandMap.put(name, command);
         command.addToList(this);
     }
@@ -40,14 +40,18 @@ public class CommandList {
         CreateCommand("print_descending", new PrintDescendingCommand());
     }
 
+    public void ExecuteCommand(String s){
+        commandMap.get(s).execute();
+    }
+
     public void Help(){
-        System.out.println("Иформация о командах");
+        col_manager.app.Write("Иформация о командах");
 
         Set<String> keys = commandMap.keySet();
 
         for (String s: keys){
-            commandMap.get(s).info();
+            col_manager.app.Write(commandMap.get(s).info());
         }
-        System.out.println("+++SUCCESS+++");
+        col_manager.app.Write("+++SUCCESS+++");
     }
 }
