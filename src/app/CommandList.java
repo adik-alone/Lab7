@@ -29,7 +29,7 @@ public class CommandList {
         CreateCommand("update", new UpdateCommand()); //ожидает данные
         CreateCommand("remove_by_id", new RemoveBYidCommand()); //ожидает данные
         CreateCommand("clear", new ClearCommand());
-        CreateCommand("save", new SaveCommand());
+//        CreateCommand("save", new SaveCommand());
         CreateCommand("execute_script", new ExecuteScriptCommand()); //ожидает данные
         CreateCommand("exit", new ExitCommand());
         CreateCommand("add_if_max", new AddIFmaxCommand()); //ожидает данные

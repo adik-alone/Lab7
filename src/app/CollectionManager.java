@@ -3,23 +3,23 @@ package app;
 import person.Person;
 
 import javax.sound.midi.Soundbank;
+import java.io.DataOutputStream;
 import java.io.IOException;
+import java.io.Writer;
+import java.net.SocketException;
 import java.time.LocalDateTime;
 import java.util.NoSuchElementException;
 import java.util.TreeSet;
 
 public class CollectionManager {
     TreeSet<Person> set;
-
     LocalDateTime creationTime;
-
     App app;
 
     public CollectionManager(App app){
         this.app = app;
         set = new TreeSet<>();
         this.creationTime = LocalDateTime.now();
-
     }
 
     public void createCollection(){
@@ -31,7 +31,7 @@ public class CollectionManager {
     }
 
     public void Add(){
-        System.out.println("Добовляем элемент ");
+        app.Write("Добовляем элемент ");
         Person person;
         try{
             person = app.createPerson(set.last().getId() + 1);
@@ -39,42 +39,42 @@ public class CollectionManager {
             person = app.createPerson(1);
         }
         set.add(person);
-        System.out.println("+++SUCCESS+++");
+        app.Write("+++SUCCESS+++");
     }
 
     public void Clear(){
-        System.out.println("Чистим коллекцию");
+        app.Write("Чистим коллекцию");
         set.clear();
-        System.out.println("+++SUCCESS+++");
+        app.Write("+++SUCCESS+++");
     }
 
     public void Show(){
-        System.out.println("Показываем коллекцию");
+        app.Write("Показываем коллекцию");
 
         if(set.isEmpty()){
-            System.out.println("collection is empty");
+            app.Write("collection is empty");
         }else{
 //            System.out.println(set);
             showCollection();
         }
-        System.out.println("+++SUCCESS+++");
+        app.Write("+++SUCCESS+++");
     }
 
     private void showCollection(){
         for (Person p: set){
-            System.out.println(p);
+            app.Write(p.toString());
 //            System.out.println();
-            System.out.println("====================================================");
-            System.out.println();
+            app.Write("====================================================");
+            app.Write("");
         }
     }
 
     public void Info(){
-        System.out.println("Информация о коллекции");
-        System.out.println("Размер коллекции: " + set.size());
-        System.out.println("Тип коллекции: " + set.getClass());
-        System.out.println("Время создания: " + creationTime);
-        System.out.println("+++SUCCESS+++");
+        app.Write("Информация о коллекции");
+        app.Write("Размер коллекции: " + set.size());
+        app.Write("Тип коллекции: " + set.getClass());
+        app.Write("Время создания: " + creationTime);
+        app.Write("+++SUCCESS+++");
     }
     public void ExecuteScript(){
         app.executeScript();
@@ -92,67 +92,69 @@ public class CollectionManager {
 
     public void Exit(){
         app.finish();
-        System.out.println("+++SUCCESS+++");
+        app.Write("+++SUCCESS+++");
     }
 
     public void Remove() {
-        System.out.println("remove.execute");
-        int id = Integer.parseInt(app.reader.WaitData());
+        app.Write("remove.execute");
+        int id = 0;
+        id = Integer.parseInt(app.reader.WaitData());
         for(Person p: set){
             if (p.getId() == id){
                 set.remove(p);
-                System.out.println("+++SUCCESS+++");
+                app.Write("+++SUCCESS+++");
                 return;
             }
         }
-        System.out.println("Такого элемента не найдено");
+        app.Write("Такого элемента не найдено");
     }
 
     public void Update() {
-        System.out.println("update.execute");
+        app.Write("update.execute");
 
-        int id = Integer.parseInt(app.reader.WaitData());
+        int id = 0;
+        id = Integer.parseInt(app.reader.WaitData());
         for (Person p: set){
             if (p.getId() == id){
                 set.remove(p);
                 set.add(app.createPerson(id));
-                System.out.println("+++SUCCESS+++");
+                app.Write("+++SUCCESS+++");
                 return;
             }
         }
-        System.out.println("Такого элемента не найдено");
+        app.Write("Такого элемента не найдено");
     }
 
     public void removeLower() {
         Person p = app.createPerson(-1);
         set.removeIf(p1 -> p.getHeight() > p1.getHeight());
-        System.out.println("+++SUCCESS+++");
+        app.Write("+++SUCCESS+++");
     }
 
     public void add_if_max() {
         Person p = app.createPerson(set.last().getId() + 1);
         for (Person p1: set){
             if (p1.getHeight() > p.getHeight()){
-                System.out.println("Сущестует больший элемент");
-                System.out.println("+++SUCCESS+++");
+                app.Write("Сущестует больший элемент");
+                app.Write("+++SUCCESS+++");
                 return;
             }
         }
         set.add(p);
-        System.out.println("+++SUCCESS+++");
+        app.Write("+++SUCCESS+++");
     }
 
     public void add_if_min() {
         Person p = app.createPerson(set.last().getId() + 1);
         for (Person p1: set){
             if (p1.getHeight() < p.getHeight()){
-                System.out.println("Сущестует меньший элемент");
-                System.out.println("+++SUCCESS+++");
+                app.Write("Сущестует меньший элемент");
+                app.Write("+++SUCCESS+++");
                 return;
             }
         }
         set.add(p);
-        System.out.println("+++SUCCESS+++");
+        app.Write("+++SUCCESS+++");
     }
 
     public void average() {
@@ -161,8 +163,8 @@ public class CollectionManager {
             h += p.getHeight();
         }
         h = h / set.size();
-        System.out.println(h + " метров : среднее значение высоты в группе");
-        System.out.println("+++SUCCESS+++");
+        app.Write(h + " метров : среднее значение высоты в группе");
+        app.Write("+++SUCCESS+++");
     }
 
     public void max_by_height() {
@@ -172,15 +174,15 @@ public class CollectionManager {
                 p = p1;
             }
         }
-        System.out.println(p);
-        System.out.println("+++SUCCESS+++");
+        app.Write(p.toString());
+        app.Write("+++SUCCESS+++");
     }
 
     public void PrintDescending() {
         for(Person p: set.descendingSet()){
-            System.out.println(p);
-            System.out.println("===================================");
+            app.Write(p.toString());
+            app.Write("===================================");
         }
-        System.out.println("+++SUCCESS+++");
+        app.Write("+++SUCCESS+++");
     }
 }

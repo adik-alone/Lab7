@@ -14,7 +14,6 @@ public class ScriptExecuter implements Reader {
     List<Scanner> listScanner = new ArrayList<>();
     String filename;
     Scanner scanner;
-
     public String WaitData(){
         String line = listScanner.get(listScanner.size() - 1).nextLine();
 //        String line = scanner.nextLine();

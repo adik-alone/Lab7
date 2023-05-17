@@ -1,6 +1,9 @@
 package app;
 
 import person.*;
+
+import java.net.SocketException;
+import java.nio.file.Watchable;
 import java.time.LocalDateTime;
 import java.util.Scanner;
 import exception.*;
@@ -14,6 +17,13 @@ public class Creator {
         this.app = app;
     }
 
+//    private String WaitData() {
+//        try {
+//            return reader.WaitData();
+//        } catch (SocketException e) {
+//            throw new RuntimeException(e);
+//        }
+//    }
     public Person createPerson(long id, Reader reader){
         this.reader = reader;
         p = new Person(id); // app.comMan.commandList.col_manager.set.last().getId() + 1
@@ -253,8 +263,5 @@ public class Creator {
                 System.out.println("Увы, Z есть всегда");
             }
         }
-    }
-    public String WaitData(){
-        return "";
     }
 }

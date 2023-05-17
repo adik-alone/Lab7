@@ -1,23 +1,30 @@
 package app;
 
+import javax.xml.crypto.Data;
+import java.io.DataInputStream;
+import java.io.IOException;
+import java.net.SocketException;
 import java.util.Scanner;
 
 public class Consol implements Reader {
+//    Scanner scanner;
 
-    Scanner scanner;
-
+    DataInputStream in;
     String[] singleLine = new String[15];
-
     int mod = 0;
     int now;
 
-    public Consol(Scanner scaner){
-        this.scanner = scaner;
+    public Consol(DataInputStream in){
+        this.in = in;
     }
 
     public String WaitData(){
         String line = null;
-        line = scanner.nextLine();
+        try {
+            line = in.readUTF();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
         return line;
     }
 
@@ -26,7 +33,11 @@ public class Consol implements Reader {
     }
 
     public void CloseStream(){
-        scanner.close();
+        try {
+            in.close();
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     public boolean singleLineCheck(String line){

@@ -25,15 +25,11 @@ public class XmlWorker implements Reader{
 
     List<String> outLines = new ArrayList<>();
     int now_line = 0;
-
     public int amount;
-
-
     public XmlWorker(String name){
         filename = name;
     }
     String filename;
-
     Document document = null;
 
     public void prepare(){
@@ -158,7 +154,6 @@ public class XmlWorker implements Reader{
         for (int i = 0; i< 10; i++){
             ClearDOM(document);
         }
-
         for (Person p: set){
             addNewPerson(p);
         }
@@ -177,9 +172,9 @@ public class XmlWorker implements Reader{
             e.printStackTrace(System.out);
         }
     }
-    public void ClearDOM(Document document) throws IOException {
+    public void ClearDOM(Document document) throws IOException  {
         Node root = document.getDocumentElement();
-        System.out.println(root);
+//        System.out.println(root);
 //        for(int i = 0; i< root.getChildNodes().getLength(); i++){
 //            System.out.println(root.getChildNodes().item(i));
 //        }
@@ -206,13 +201,11 @@ public class XmlWorker implements Reader{
         }
         return false;
     }
-
     @Override
     public String WaitData() {
         now_line += 1;
         return outLines.get(now_line - 1);
     }
-
     public Document getDocument() {
         return document;
     }
