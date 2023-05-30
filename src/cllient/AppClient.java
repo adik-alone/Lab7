@@ -8,9 +8,7 @@ public class AppClient {
     BufferedReader input;
     ListWithCommandClient list;
     CreatorClient creator;
-
     String nameCommand;
-
     Request currentRequest;
 
     public void start(BufferedReader br) {
@@ -60,14 +58,6 @@ public class AppClient {
         currentRequest.setCommand(nameCommand);
         currentRequest.setCreatedPerson(creator.createPersonWithoutID());
     }
-    public void OneRequest(){
-
-    }
-    public void AllRequest(){
-
-    }
-
-
     public Request getCurrentRequest(){
         return currentRequest;
     }

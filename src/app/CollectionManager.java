@@ -28,6 +28,7 @@ public class CollectionManager {
             Person person = app.creationStartPerson();
             set.add(person);
         }
+        System.out.println("Collection created success");
     }
 
     public void Add(){
@@ -76,9 +77,9 @@ public class CollectionManager {
         app.Write("Время создания: " + creationTime);
         app.Write("+++SUCCESS+++");
     }
-    public void ExecuteScript(){
-        app.executeScript();
-    }
+//    public void ExecuteScript(){
+//        app.executeScript();
+//    }
 
     public void Save(){
         System.out.println("save.execute");
@@ -90,10 +91,10 @@ public class CollectionManager {
         System.out.println("+++SUCCESS+++");
     }
 
-    public void Exit(){
-        app.finish();
-        app.Write("+++SUCCESS+++");
-    }
+//    public void Exit(){
+//        app.finish();
+//        app.Write("+++SUCCESS+++");
+//    }
 
     public void Remove() {
         app.Write("remove.execute");

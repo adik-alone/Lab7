@@ -35,6 +35,6 @@ public class Request implements Serializable {
 
     @Override
     public String toString() {
-        return command + "\n" + data + "\n" + createdPerson;
+        return "Имя команды: " + command + "\n" + "Дополнительные данные: " + data + "Созданная персона: " + "\n" + createdPerson;
     }
 }

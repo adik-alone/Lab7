@@ -85,7 +85,7 @@ public abstract class Creator {
         p.setBirthday(LocalDateTime.of(birthday.getYear(), birthday.getMounth(), birthday.getDay(), birthday.getHour(), birthday.getMinute()));
     }
 
-    private void YearAsker(Date birthday) {
+    public void YearAsker(Date birthday) {
         while(true){
             try {
                 System.out.println("Введите год рождения:");

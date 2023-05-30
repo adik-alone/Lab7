@@ -4,8 +4,9 @@ import exception.NotBeNullException;
 import exception.RangeException;
 
 import java.io.NotActiveException;
+import java.io.Serializable;
 
-public class Coordinates {
+public class Coordinates implements Serializable {
     private Long x; //Поле не может быть null
     private Double y; //Максимальное значение поля: 55, Поле не может быть null
     public void setY (Double y) throws NotBeNullException, RangeException {

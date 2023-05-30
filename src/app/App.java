@@ -11,17 +11,15 @@ import java.util.NoSuchElementException;
 public class App {
     CommandList list;
     boolean work;
-    String line;
     CreatorServer creator;
-    ScriptExecuter scriptExecuter;
-    Consol consol;
     Reader reader;
-    SingleLine singleLine;
     XmlWorker xmlworker;
-//    DataInputStream in;
     ObjectInputStream in;
     DataOutputStream out;
 
+    int amountRequest;
+
+    Request currentRequest;
 
     public void setInputStream(ObjectInputStream in){
         this.in = in;
@@ -33,9 +31,6 @@ public class App {
     //блок инициализации
     public void start(CommandList l){
         creator = new CreatorServer(this);
-        consol = new Consol(in);
-        scriptExecuter = new ScriptExecuter();
-        singleLine = new SingleLine();
         work = true;
         String filename = "Collection.xml";
 //        String filename = System.getenv("PATH_COLLECTION");
@@ -44,9 +39,8 @@ public class App {
         reader = xmlworker;
         this.list = l;
         list.col_manager.createCollection();
-        reader = consol;
     }
-    protected void Write(String s){
+    public void Write(String s){
         try{
             out.writeUTF(s);
             out.flush();
@@ -54,31 +48,48 @@ public class App {
             System.out.println("Клиент отключился");
         }
     }
-
-    public void Work() throws SocketException {
+    public void Write(Person p){
         try{
-            if(reader.Work()) {
-                line = reader.WaitData();
-                if (line.equals("")) {
-                } else {
-                    if (singleLine.Check(line)){
-                        ChangeReader(singleLine);
-                        line = singleLine.WaitData();
-                    }
-                    GetCommand(line);
-                }
-            }else{
-                ChangeReader(consol);
-            }
-        }catch (NoSuchElementException e){
-            System.out.println("Экстренный выход");
-            finish();
+            out.writeUTF(p.toString());
+            out.flush();
+        }catch (IOException e){
+            e.printStackTrace();
         }
+    }
+
+//    ---------------
+//    блок работы
+//    ---------------
+    public void HandlerRequests() throws IOException, ClassNotFoundException{
+        amountRequest();
+        for (int i = 0; i < amountRequest; i++){
+            readRequest();
+        }
+    }
+    public void amountRequest()throws IOException, ClassNotFoundException{
+        System.out.println("Ожидаю службный запрос");
+        Request r = (Request) in.readObject();
+        amountRequest = Integer.parseInt(r.getData());
+        System.out.println("Служебный запрос обработан");
+    }
+    public void readRequest() throws IOException, ClassNotFoundException {
+        System.out.println("Жду запроса");
+        System.out.println("===========");
+        Request r = (Request) in.readObject();
+        currentRequest = r;
+        System.out.println("Запрос выглядит так:");
+        System.out.println(r);
+        acceptRequest(r);
+    }
+    public String getRequestData(){
+        return currentRequest.getData();
+    }
+    public Person getRequestPerson(){
+        return currentRequest.getCreatedPerson();
     }
 
     public void acceptRequest(Request r){
         String command = r.getCommand();
-        System.out.println(command);
         Person p = r.getCreatedPerson();
         String data = r.getData();
         GetCommand(command);
@@ -92,13 +103,6 @@ public class App {
             Write("Хорошая попытка, попробуйте снова. Команда help выведет информацию о всех командах");
         }
     }
-    public void finish(){
-        work = false;
-        consol.CloseStream();
-    }
-    public void ChangeReader(Reader r){
-        reader = r;
-    }
 
     public Person creationStartPerson() {
         return creator.createPerson(reader);
@@ -111,22 +115,16 @@ public class App {
         return creator.createPerson(id, reader);
     }
 
-    public void executeScript(){
-        try {
-            Write("Введите путь до файла");
-            String file_name = reader.WaitData();
-            scriptExecuter.openFile(file_name);
-            ChangeReader(scriptExecuter);
-        } catch (FileNotFoundException e) {
-            Write("Такого файла не существует попробуйте снова");
-        }catch (ScriptRecursionException e){
-            Write("Вы создали рекурсию скриптов. Сейчас я смог с этим справиться, но впредь не стоит так делать!");
-        }
-    }
-
-    public DataOutputStream getOut(){
-        return out;
-    }
-//
-
+//    public void executeScript(){
+//        try {
+//            Write("Введите путь до файла");
+//            String file_name = reader.WaitData();
+//            scriptExecuter.openFile(file_name);
+//            ChangeReader(scriptExecuter);
+//        } catch (FileNotFoundException e) {
+//            Write("Такого файла не существует попробуйте снова");
+//        }catch (ScriptRecursionException e){
+//            Write("Вы создали рекурсию скриптов. Сейчас я смог с этим справиться, но впредь не стоит так делать!");
+//        }
+//    }
 }

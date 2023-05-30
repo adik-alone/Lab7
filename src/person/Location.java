@@ -2,7 +2,9 @@ package person;
 
 import exception.NotBeNullException;
 
-public class Location {
+import java.io.Serializable;
+
+public class Location implements Serializable {
     private int x;
     private double y;
     private Double z; //Поле не может быть null

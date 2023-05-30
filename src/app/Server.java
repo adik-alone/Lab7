@@ -14,15 +14,21 @@ public class Server {
     public static void main (String[] args){
 
         App app = new App();
+        int port = 5555;
 
         CollectionManager collection = new CollectionManagerServer(app);
         CommandList list = new CommandList(collection);
         list.CreateList();
         app.start(list);
 
-        try(ServerSocket serverSocket = new ServerSocket(5555)){
+        System.out.println("Сервер начинает работу на порте " + port);
+
+        try(ServerSocket serverSocket = new ServerSocket(port)){
             while(true) {
-                Socket client = serverSocket.accept();;
+                System.out.println("");
+                System.out.println("Ожидание клиента:");
+                System.out.println("----------------");
+                Socket client = serverSocket.accept();
                 System.out.println("Клиент в конекте");
 
                 ObjectInputStream in = new ObjectInputStream(client.getInputStream());
@@ -30,40 +36,24 @@ public class Server {
                 DataOutputStream out = new DataOutputStream(client.getOutputStream());
 
                 System.out.println("Потоки созданы");
-
-                System.out.println("Начинаем общение с клиентом");
-
                 app.setInputStream(in);
                 app.setOutputStream(out);
+                System.out.println("Потоки подключены к приложению");
 
+                System.out.println("Начинаем общение с клиентом...");
 
-                while (!client.isClosed()) {
                     try {
-
-
-                        Request r = (Request) in.readObject();
-                        System.out.println(r);
-
-                        app.acceptRequest(r);
-
-                        //Модуль обработки запроса
-                        System.out.println("Ответ от сервера");
-
-
-
-                        //Модуль оправки ответа
-//                        out.writeUTF("Отвечаю --- " + entery);
-//                        out.flush();
+                        app.HandlerRequests();
                     }catch (SocketException e){
                         System.out.println("Пользователь принудительно разорвал соединение");
-                        break;
                     } catch (ClassNotFoundException e) {
                         e.printStackTrace();
                     }
-                }
+                app.Write("Зарос выполнен выполняем отключение от сервера");
                 in.close();
                 out.close();
                 client.close();
+                System.out.println("Клиент отключен...");
             }
         }catch (IOException e){
             e.printStackTrace();
