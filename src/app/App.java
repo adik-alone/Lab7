@@ -1,31 +1,29 @@
 package app;
 
+import cllient.Request;
 import exception.ScriptRecursionException;
 import person.Person;
 
-import java.io.DataInputStream;
-import java.io.DataOutputStream;
-import java.io.FileNotFoundException;
-import java.io.IOException;
+import java.io.*;
 import java.net.SocketException;
 import java.util.NoSuchElementException;
-import java.util.Scanner;
 
 public class App {
-    CommandManager comMan;
+    CommandList list;
     boolean work;
     String line;
-    Creator creator;
+    CreatorServer creator;
     ScriptExecuter scriptExecuter;
     Consol consol;
     Reader reader;
     SingleLine singleLine;
     XmlWorker xmlworker;
-    DataInputStream in;
+//    DataInputStream in;
+    ObjectInputStream in;
     DataOutputStream out;
-    int mod = 0; // 0 --- консоль |||| 1 --- скрипт
 
-    public void setInputStream(DataInputStream in){
+
+    public void setInputStream(ObjectInputStream in){
         this.in = in;
     }
     public void setOutputStream(DataOutputStream out){
@@ -33,10 +31,9 @@ public class App {
     }
 
     //блок инициализации
-    public void start(CommandManager cm) throws SocketException{
-        creator = new Creator(this);
+    public void start(CommandList l){
+        creator = new CreatorServer(this);
         consol = new Consol(in);
-        comMan = cm;
         scriptExecuter = new ScriptExecuter();
         singleLine = new SingleLine();
         work = true;
@@ -45,25 +42,23 @@ public class App {
         xmlworker = new XmlWorker(filename);
         xmlworker.parse();
         reader = xmlworker;
-        comMan.commandList.col_manager.createCollection();
+        this.list = l;
+        list.col_manager.createCollection();
         reader = consol;
-        while (work){
-            Work();
-        }
     }
     protected void Write(String s){
         try{
             out.writeUTF(s);
             out.flush();
         }catch (IOException e){
-            e.printStackTrace();
+            System.out.println("Клиент отключился");
         }
     }
 
     public void Work() throws SocketException {
         try{
             if(reader.Work()) {
-                line = reader.WaitData().trim();
+                line = reader.WaitData();
                 if (line.equals("")) {
                 } else {
                     if (singleLine.Check(line)){
@@ -80,9 +75,19 @@ public class App {
             finish();
         }
     }
+
+    public void acceptRequest(Request r){
+        String command = r.getCommand();
+        System.out.println(command);
+        Person p = r.getCreatedPerson();
+        String data = r.getData();
+        GetCommand(command);
+    }
+
+
     public void GetCommand(String Line){
         try{
-            comMan.getCommand(Line);
+            list.ExecuteCommand(Line);
         }catch (NullPointerException e){
             Write("Хорошая попытка, попробуйте снова. Команда help выведет информацию о всех командах");
         }
@@ -118,6 +123,7 @@ public class App {
             Write("Вы создали рекурсию скриптов. Сейчас я смог с этим справиться, но впредь не стоит так делать!");
         }
     }
+
     public DataOutputStream getOut(){
         return out;
     }

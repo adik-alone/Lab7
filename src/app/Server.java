@@ -1,8 +1,11 @@
 package app;
 
+import cllient.Request;
+
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
+import java.io.ObjectInputStream;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.net.SocketException;
@@ -12,19 +15,17 @@ public class Server {
 
         App app = new App();
 
-        CollectionManager collection = new CollectionManager(app);
+        CollectionManager collection = new CollectionManagerServer(app);
         CommandList list = new CommandList(collection);
-        CommandManager manager = new CommandManager(list);
         list.CreateList();
-
+        app.start(list);
 
         try(ServerSocket serverSocket = new ServerSocket(5555)){
             while(true) {
                 Socket client = serverSocket.accept();;
                 System.out.println("Клиент в конекте");
 
-                //Stream from user
-                DataInputStream in = new DataInputStream(client.getInputStream());
+                ObjectInputStream in = new ObjectInputStream(client.getInputStream());
                 //Stream to user
                 DataOutputStream out = new DataOutputStream(client.getOutputStream());
 
@@ -35,17 +36,18 @@ public class Server {
                 app.setInputStream(in);
                 app.setOutputStream(out);
 
+
                 while (!client.isClosed()) {
                     try {
-                        //Модуль получения запроса
-//                        String entery = in.readUTF();
-//                        System.out.println("Строка полученна --- " + entery);
 
-                        app.start(manager);
+
+                        Request r = (Request) in.readObject();
+                        System.out.println(r);
+
+                        app.acceptRequest(r);
 
                         //Модуль обработки запроса
                         System.out.println("Ответ от сервера");
-
 
 
 
@@ -55,6 +57,8 @@ public class Server {
                     }catch (SocketException e){
                         System.out.println("Пользователь принудительно разорвал соединение");
                         break;
+                    } catch (ClassNotFoundException e) {
+                        e.printStackTrace();
                     }
                 }
                 in.close();

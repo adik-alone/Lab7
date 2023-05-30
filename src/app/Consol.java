@@ -1,29 +1,36 @@
 package app;
 
+import cllient.Request;
+
 import javax.xml.crypto.Data;
 import java.io.DataInputStream;
 import java.io.IOException;
+import java.io.ObjectInputStream;
 import java.net.SocketException;
 import java.util.Scanner;
 
 public class Consol implements Reader {
 //    Scanner scanner;
 
-    DataInputStream in;
+    ObjectInputStream in;
     String[] singleLine = new String[15];
     int mod = 0;
     int now;
 
-    public Consol(DataInputStream in){
+    public Consol(ObjectInputStream in){
         this.in = in;
     }
 
     public String WaitData(){
         String line = null;
         try {
-            line = in.readUTF();
+            Request request = (Request) in.readObject();
+            line = request.getCommand();
+//            line = in.readUTF();
         } catch (IOException e) {
             e.printStackTrace();
+        } catch (ClassNotFoundException e) {
+            throw new RuntimeException(e);
         }
         return line;
     }

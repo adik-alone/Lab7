@@ -9,32 +9,39 @@ public class Client {
     public static void main(String[] args){
         try(Socket socket = new Socket("localhost", 5555);
             BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-            DataOutputStream out = new DataOutputStream(socket.getOutputStream());
+//            DataOutputStream out = new DataOutputStream(socket.getOutputStream());
+            ObjectOutputStream out = new ObjectOutputStream(socket.getOutputStream());
             DataInputStream in = new DataInputStream(socket.getInputStream());)
         {
-
             System.out.println("Создал потоки");
             System.out.println("Подключился к серверу и начинаю работу");
 
+            AppClient app = new AppClient();
+            app.start(br);
+
             while (!socket.isOutputShutdown()){
                 if(br.ready()){
-                    String message = br.readLine();
+//                    String message = br.readLine();
 //                    System.out.println("Сообщение введено === " + message);
                     System.out.println("Отправляю на сервер");
+                    app.Work();
+                    System.out.println("текущий запрос: " + app.getCurrentRequest());
+//
+                    out.writeObject(app.getCurrentRequest());
 
-                    out.writeUTF(message);
+//                    out.writeUTF(message);
                     out.flush();
                     System.out.println("Сообщение отправленно");
 
-                    if(message.equals("exit")){
-                        System.out.println("Клиент разрывает общение");
-                        if(in.available()!=0)		{
-                            System.out.println("reading...");
-                            String s = in.readUTF();
-                            System.out.println(s);
-                        }
-                        break;
-                    }
+//                    if(message.equals("exit")){
+//                        System.out.println("Клиент разрывает общение");
+//                        if(in.available()!=0)		{
+//                            System.out.println("reading...");
+//                            String s = in.readUTF();
+//                            System.out.println(s);
+//                        }
+//                        break;
+//                    }
                     System.out.println("Сервер пытается ответить");
                     System.out.println("reading...");
                     Thread.sleep(1000);

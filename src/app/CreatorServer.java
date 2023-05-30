@@ -1,17 +1,66 @@
 package app;
 
-import exception.NotBeNullException;
-import exception.RangeException;
-import person.Coordinates;
-import person.Location;
-import person.Person;
+import person.*;
 
 import java.time.LocalDateTime;
 
-public abstract class Creator {
+import exception.*;
 
+public class CreatorServer extends Creator {
+    App app;
+    Reader reader;
     protected Person p;
-    public void NameAsk(){
+
+    public CreatorServer(App app){
+        this.app = app;
+    }
+
+    public CreatorServer() {
+    }
+
+    //    private String WaitData() {
+//        try {
+//            return reader.WaitData();
+//        } catch (SocketException e) {
+//            throw new RuntimeException(e);
+//        }
+//    }
+    // обычный создатель персоны
+    // имя, координаты, рост, день рождения, Цвет глаз, цвет волос, локация
+    //НО также передаётся id
+    public Person createPerson(long id, Reader reader){
+        this.reader = reader;
+        p = new Person(id); // app.comMan.commandList.col_manager.set.last().getId() + 1
+        NameAsk();
+        CoordinatesAsker();
+        HeightAsker();
+        BirthdayAsker();
+        EyeColorAsker();
+        HairColorAsker();
+        LocationAsker();
+        return p;
+    }
+    // Для заполнения коллекции в самом начале
+    // заполняются все поля
+    public Person createPerson(Reader reader){
+        this.reader = reader;
+        p = new Person(); // app.comMan.commandList.col_manager.set.last().getId() + 1
+        IdAsker();
+        NameAsk();
+        CoordinatesAsker();
+        CreationDateAsker();
+        HeightAsker();
+        BirthdayAsker2();
+        EyeColorAsker();
+        HairColorAsker();
+        LocationAsker();
+        return p;
+    }
+
+    protected void IdAsker(){
+        p.setId(Long.parseLong(WaitData()));
+    }
+    public void NameAsk(){  
         while (true){
             try{
                 System.out.println("Введите имя: ");
@@ -22,7 +71,7 @@ public abstract class Creator {
             }
         }
     }
-
+    
     public void CoordinatesAsker(){
         Coordinates cor = new Coordinates();
         XCoordAsker(cor);
@@ -59,7 +108,7 @@ public abstract class Creator {
             }
         }
     }
-
+    
     protected void HeightAsker(){
         while(true){
             try{
@@ -75,6 +124,14 @@ public abstract class Creator {
         }
     }
 
+    private void CreationDateAsker(){
+        p.setCreationDate(LocalDateTime.parse(WaitData()));
+    }
+
+    private void BirthdayAsker2(){
+        p.setBirthday(LocalDateTime.parse(WaitData()));
+    }
+
     protected void BirthdayAsker(){
         Date birthday = new Date();
         YearAsker(birthday);
@@ -84,7 +141,6 @@ public abstract class Creator {
         MinuteAsker(birthday);
         p.setBirthday(LocalDateTime.of(birthday.getYear(), birthday.getMounth(), birthday.getDay(), birthday.getHour(), birthday.getMinute()));
     }
-
     private void YearAsker(Date birthday) {
         while(true){
             try {
@@ -142,6 +198,7 @@ public abstract class Creator {
             }
         }
     }
+
     public void EyeColorAsker(){
         while (true){
             try {
@@ -166,6 +223,7 @@ public abstract class Creator {
             }
         }
     }
+
     public void LocationAsker(){
         Location location = new Location();
         XLocalAsker(location);
@@ -210,7 +268,6 @@ public abstract class Creator {
     }
 
     protected String WaitData(){
-
-        return "";
+        return reader.WaitData().trim();
     }
 }
