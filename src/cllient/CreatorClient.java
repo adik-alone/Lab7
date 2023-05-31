@@ -11,7 +11,7 @@ public class CreatorClient extends Creator {
     }
 
     public String WaitData(){
-        return app.Read();
+        return app.reader.WaitData().trim();
     }
     public Person createPersonWithoutID(){
         p = new Person();

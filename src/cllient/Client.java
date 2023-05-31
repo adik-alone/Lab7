@@ -7,8 +7,20 @@ import java.net.Socket;
 
 public class Client {
     public static void main(String[] args){
+
+        System.out.println("Создаю приложение");
+        AppClient app = new AppClient();
+
+        System.out.println("Запускаем приложение");
+
+        app.start();
+
+
+
+
+
         try(Socket socket = new Socket("localhost", 5555);
-            BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+//            BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
 //            DataOutputStream out = new DataOutputStream(socket.getOutputStream());
             ObjectOutputStream out = new ObjectOutputStream(socket.getOutputStream());
             DataInputStream in = new DataInputStream(socket.getInputStream());)
@@ -16,8 +28,8 @@ public class Client {
             System.out.println("Создал потоки");
             System.out.println("Подключился к серверу и начинаю работу");
 
-            AppClient app = new AppClient();
-            app.start(br);
+
+//            app.start(br);
 
             while (!socket.isOutputShutdown()){
                 if(br.ready()){
@@ -25,9 +37,9 @@ public class Client {
 //                    System.out.println("Сообщение введено === " + message);
                     System.out.println("Отправляю на сервер");
                     app.Work();
-                    System.out.println("текущий запрос: " + app.getCurrentRequest());
-//
-                    out.writeObject(app.getCurrentRequest());
+//                    System.out.println("текущий запрос: " + app.getCurrentRequest());
+////
+//                    out.writeObject(app.getCurrentRequest());
 
 //                    out.writeUTF(message);
                     out.flush();
