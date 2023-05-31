@@ -61,15 +61,27 @@ public class App {
 //    блок работы
 //    ---------------
     public void HandlerRequests() throws IOException, ClassNotFoundException{
-        amountRequest();
-        for (int i = 0; i < amountRequest; i++){
-            readRequest();
+//        amountRequest();
+        System.out.println("Хочу прочитать массив");
+        while(in.available() > 0) {
+            System.out.println("Окей, мы здесь");
+            Request[] requests = (Request[]) in.readObject();
+            for( Request request: requests){
+                System.out.println(request);
+            }
         }
+        System.out.println("Вот тут ввод должен завершиться");
+
+//        for (int i = 0; i < amountRequest; i++){
+//            readRequest();
+//        }
     }
     public void amountRequest()throws IOException, ClassNotFoundException{
         System.out.println("Ожидаю службный запрос");
-        Request r = (Request) in.readObject();
-        amountRequest = Integer.parseInt(r.getData());
+        if (in.available() > 0) {
+            Request r = (Request) in.readObject();
+            amountRequest = Integer.parseInt(r.getData());
+        }
         System.out.println("Служебный запрос обработан");
     }
     public void readRequest() throws IOException, ClassNotFoundException {

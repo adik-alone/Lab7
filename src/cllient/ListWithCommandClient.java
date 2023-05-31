@@ -12,6 +12,7 @@ import java.util.Map;
 public class ListWithCommandClient {
     AppClient app;
 
+    RequestFactory requestFactory;
     String nameCommand;
     Map<String, Command> commandList = new HashMap<>();
 
@@ -52,5 +53,12 @@ public class ListWithCommandClient {
 
     public AppClient getApp(){
         return this.app;
+    }
+
+    public void setRequestFactory(RequestFactory rf){
+        this.requestFactory = rf;
+    }
+    public RequestFactory getRequestFactory(){
+        return requestFactory;
     }
 }

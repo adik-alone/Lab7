@@ -13,7 +13,7 @@ public class ScriptCommand implements CommandClient{
 
     @Override
     public void execute() {
-
+        lwcc.getApp().executeScript();
     }
 
     @Override

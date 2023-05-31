@@ -1,21 +1,27 @@
 package cllient;
 
 import app.*;
+import app.Reader;
 import exception.ScriptRecursionException;
 import person.Person;
 
-import java.io.BufferedReader;
-import java.io.FileNotFoundException;
-import java.io.IOException;
+import java.io.*;
+import java.net.Socket;
+import java.net.SocketException;
 import java.util.NoSuchElementException;
 import java.util.Scanner;
 
 public class AppClient {
-    BufferedReader input;
     ListWithCommandClient list;
     CreatorClient creator;
-    String nameCommand;
-    Request[] currentRequest;
+    Request currentRequest;
+    Request serviceRequest;
+    Request[] requests;
+
+    ObjectOutputStream out;
+    DataInputStream in;
+
+//    ТОТ
 
     RequestFactory requestFactory;
     //////////////////////////////////////////////////////////////////////////////////
@@ -31,11 +37,15 @@ public class AppClient {
         scriptExecuter = new ScriptExecuter();
         singleLine = new SingleLine();
         reader = consol;
-        while (work){
-            Work();
-        }
+        requestFactory = new RequestFactory();
+        requestFactory.setApp(this);
+        list = new ListWithCommandClient();
+        list.setApp(this);
+        list.Create();
+        creator = new CreatorClient(this);
+        list.setRequestFactory(requestFactory);
     }
-    public void Work(){
+    public void WaitCommand(){
         try{
             if(reader.Work()) {
                 line = reader.WaitData().trim();
@@ -51,15 +61,101 @@ public class AppClient {
             }
         }catch (NoSuchElementException e){
             System.out.println("Экстренный выход");
-            finish();
         }
+    }
+
+    public void Work(){
+        while(true){
+            try {
+                PrepareRequest();
+                WaitCommand();
+                while (reader.equals(scriptExecuter)) {
+                    WaitCommand();
+                }
+                requestFactory.EndOfService();
+                requests = requestFactory.DoneRequest();
+
+
+                for (int i = 0; i < requests.length; i++) {
+                    System.out.println(requests[i]);
+                }
+                System.out.println("Должны соеденится с сервером");
+                ConnectingToServer(requests);
+                System.out.println("Должные отправить запрос");
+//                SendRequest(requests);
+                System.out.println("");
+                requestFactory.Clear();
+                System.out.println("Очистили фабрику");
+                System.out.println("Конец выполнения запроса");
+                System.out.println("===============================");
+
+                System.out.println("Сервер пытается ответить");
+                System.out.println("reading...");
+                try {
+                    Thread.sleep(1000);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+                try {
+                    while (in.available() != 0) {
+                        String s = in.readUTF();
+                        System.out.println(s);
+                    }
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }catch (SocketException e){
+                e.printStackTrace();
+            }
+        }
+    }
+
+
+    public void ConnectingToServer(Request[] requests) throws SocketException{
+        try(Socket socket = new Socket("localhost", 5555);
+            ObjectOutputStream outS = new ObjectOutputStream(socket.getOutputStream());
+            DataInputStream inS = new DataInputStream(socket.getInputStream());) {
+            System.out.println("Создал потоки");
+            in = inS;
+            out = outS;
+
+            outS.writeObject(requests);
+            System.out.println("Подключился к серверу и начинаю работу...");
+            System.out.println("+++++++++++++++++++++++++++++++++++++++++");
+        }catch (IOException e){
+            e.printStackTrace();
+        }
+    }
+
+    public void SendRequest(Request[] requests){
+//        for(Request request: requests){
+//            try {
+//                out.writeObject(request);
+//            } catch (IOException e) {
+//                e.printStackTrace();
+//            }
+//        }
+        try {
+            out.writeObject(requests);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        System.out.println("Запрос отправлен");
+        System.out.println("-------------------------------------------");
+    }
+
+
+    public void PrepareRequest(){
+        requestFactory.CreateServiceRequest();
     }
     public void GetCommand(String Line){
         try{
             list.ExecuteCommand(Line);
         }catch (NullPointerException e){
             System.out.println("Хорошая попытка, попробуйте снова. Команда help выведет информацию о всех командах");
+//            e.printStackTrace();
         }
+
     }
     public void finish(){
         work = false;
@@ -98,9 +194,9 @@ public class AppClient {
 
 
 
-    public void GiveRequest(Request[] r){
-        this.currentRequest = r;
-    }
+//    public void GiveRequest(Request[] r){
+//        this.currentRequest = r;
+//    }
 
 
 

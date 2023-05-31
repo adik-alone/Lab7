@@ -2,6 +2,7 @@ package cllient;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 public class RequestFactory {
 
@@ -19,22 +20,36 @@ public class RequestFactory {
         listOfRequest.add(currentServiceRequest);
     }
     public void SingleRequest(){
-        CreateServiceRequest();
+        System.out.println("Мы здесь");
         currentRequest = CreateRequest();
         currentRequest.setCommand(app.list.getCurrentNameCommand());
-        app.GiveRequest(DoneRequest());
+        listOfRequest.add(currentRequest);
     }
     public void PersonRequest(){
         currentRequest = CreateRequest();
-//        currentRequest.setCommand(nameCommand);
-//        currentRequest.setCreatedPerson(creator.createPersonWithoutID());
+        currentRequest.setCommand(app.list.getCurrentNameCommand());
+        currentRequest.setCreatedPerson(app.creator.createPersonWithoutID());
+        listOfRequest.add(currentRequest);
     }
     public Request getCurrentRequest(){
         return currentRequest;
     }
 
     public Request[] DoneRequest(){
-        Request[] r = (Request[]) listOfRequest.stream().toArray();
-        return r;
+        Request[] requests = listOfRequest.toArray(new Request[0]);
+        return requests;
+    }
+
+    public void EndOfService(){
+        currentServiceRequest.setData(String.valueOf(listOfRequest.size()));
+        listOfRequest.set(0, currentServiceRequest);
+    }
+
+    public void setApp(AppClient app) {
+        this.app = app;
+    }
+
+    public void Clear(){
+        listOfRequest.removeAll(listOfRequest);
     }
 }

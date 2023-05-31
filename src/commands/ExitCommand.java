@@ -8,7 +8,7 @@ public class ExitCommand implements Command{
 
     public void execute(){
         System.out.println("exit.execute");
-        list.col_manager.Exit();
+//        list.col_manager.Exit();
     }
 
     @Override

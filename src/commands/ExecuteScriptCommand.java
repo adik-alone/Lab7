@@ -6,7 +6,7 @@ public class ExecuteScriptCommand implements Command{
     CommandList list;
     @Override
     public void execute() {
-        list.col_manager.ExecuteScript();
+//        list.col_manager.ExecuteScript();
     }
 
     @Override
