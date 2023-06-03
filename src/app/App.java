@@ -77,7 +77,7 @@ public class App {
 //        }
     }
     public void amountRequest()throws IOException, ClassNotFoundException{
-        System.out.println("Ожидаю службный запрос");
+        System.out.println("Ожидаю служебный запрос");
         if (in.available() > 0) {
             Request r = (Request) in.readObject();
             amountRequest = Integer.parseInt(r.getData());

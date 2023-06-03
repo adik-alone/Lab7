@@ -1,9 +1,9 @@
 package cllient;
 
 import app.*;
+import app.Console;
 import app.Reader;
 import exception.ScriptRecursionException;
-import person.Person;
 
 import java.io.*;
 import java.net.Socket;
@@ -24,19 +24,19 @@ public class AppClient {
 //    ТОТ
 
     RequestFactory requestFactory;
-    //////////////////////////////////////////////////////////////////////////////////
+    //--
     Reader reader;
     String line;
     ScriptExecuter scriptExecuter;
-    Consol consol;
+    Console console;
     SingleLine singleLine;
     boolean work = true;
     //блок инициализации
     public void start(){
-        consol = new Consol(new Scanner(System.in));
+        console = new Console(new Scanner(System.in));
         scriptExecuter = new ScriptExecuter();
         singleLine = new SingleLine();
-        reader = consol;
+        reader = console;
         requestFactory = new RequestFactory();
         requestFactory.setApp(this);
         list = new ListWithCommandClient();
@@ -57,7 +57,7 @@ public class AppClient {
                     GetCommand(line);
                 }
             }else{
-                ChangeReader(consol);
+                ChangeReader(console);
             }
         }catch (NoSuchElementException e){
             System.out.println("Экстренный выход");
@@ -159,7 +159,7 @@ public class AppClient {
     }
     public void finish(){
         work = false;
-        consol.CloseStream();
+        console.CloseStream();
     }
     public void ChangeReader(Reader r){
         reader = r;

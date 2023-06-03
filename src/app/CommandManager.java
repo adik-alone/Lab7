@@ -4,7 +4,7 @@ public class CommandManager {
     String our_command;
     CommandList commandList;
 
-    ScriptExecuter skriptExecuter;
+    ScriptExecuter scriptExecuter;
 
     public CommandManager(CommandList list){
         this.commandList = list;
@@ -15,11 +15,11 @@ public class CommandManager {
         commandList.commandMap.get(s).execute();
     }
 
-    public void setSkriptExecuter(ScriptExecuter skriptExecuter) {
-        this.skriptExecuter = skriptExecuter;
+    public void setScriptExecuter(ScriptExecuter scriptExecuter) {
+        this.scriptExecuter = scriptExecuter;
     }
 
-    public ScriptExecuter getSkriptExecuter() {
-        return skriptExecuter;
+    public ScriptExecuter getScriptExecuter() {
+        return scriptExecuter;
     }
 }

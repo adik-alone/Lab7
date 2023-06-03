@@ -27,18 +27,6 @@ public class Person implements Comparable<Person>, Comparator<Person>, Serializa
         return (int) (o1.getHeight() - o2.getHeight());
     }
 
-//    public Person(long id, String name, double height, ColorEye eye, ColorHair hair, LocalDateTime birthday, long x, double y, int XL, double YL, Double ZL) throws NotBeNullException {
-//        this.id = id;
-//        this.name = name;
-//        this.height = height;
-//        this.eyeColor = eye;
-//        this.hairColor = hair;
-//        this.birthday = birthday;
-//        this.coordinates = new Coordinates(x, y);
-//        this.location = new Location(XL, YL, ZL);
-//        this.creationDate = LocalDateTime.now();
-//    }
-
     public Person(long id){
         this.id = id;
         this.creationDate = LocalDateTime.now();

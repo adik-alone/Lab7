@@ -2,16 +2,15 @@ package app;
 
 import java.util.Scanner;
 
-public class Consol implements Reader {
+public class Console implements Reader {
 
     Scanner scanner;
     String[] singleLine = new String[15];
 
-    int mod = 0;
     int now;
 
-    public Consol(Scanner scaner){
-        this.scanner = scaner;
+    public Console(Scanner scanner){
+        this.scanner = scanner;
     }
 
     public String WaitData(){
@@ -38,10 +37,7 @@ public class Consol implements Reader {
     }
 
     public boolean LenCheck(){
-        if (now == singleLine.length){
-            return false;
-        }
-        return true;
+        return now != singleLine.length;
     }
     public String SingleWaitData(){
         now += 1;

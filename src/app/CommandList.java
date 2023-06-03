@@ -26,18 +26,18 @@ public class CommandList {
         CreateCommand("info", new InfoCommand());
         CreateCommand("show", new ShowCommand());
         CreateCommand("add", new AddCommand()); // ожидает данные
-//        CreateCommand("update", new UpdateCommand()); //ожидает данные
-//        CreateCommand("remove_by_id", new RemoveBYidCommand()); //ожидает данные
-//        CreateCommand("clear", new ClearCommand());
-//        CreateCommand("save", new SaveCommand());
+        CreateCommand("update", new UpdateCommand()); //ожидает данные
+        CreateCommand("remove_by_id", new RemoveBYidCommand()); //ожидает данные
+        CreateCommand("clear", new ClearCommand());
+        CreateCommand("save", new SaveCommand());
         CreateCommand("execute_script", new ExecuteScriptCommand()); //ожидает данные
-//        CreateCommand("exit", new ExitCommand());
-//        CreateCommand("add_if_max", new AddIFmaxCommand()); //ожидает данные
-//        CreateCommand("add_if_min", new AddIFminCommand()); //ожидает данные
-//        CreateCommand("remove_lower", new RemoveLowerCommand()); //ожидает данные
-//        CreateCommand("average_of_height", new AverageOFheightCommand());
-//        CreateCommand("max_by_height", new MaxBYheightCommand());
-//        CreateCommand("print_descending", new PrintDescendingCommand());
+        CreateCommand("exit", new ExitCommand());
+        CreateCommand("add_if_max", new AddIFmaxCommand()); //ожидает данные
+        CreateCommand("add_if_min", new AddIFminCommand()); //ожидает данные
+        CreateCommand("remove_lower", new RemoveLowerCommand()); //ожидает данные
+        CreateCommand("average_of_height", new AverageOFheightCommand());
+        CreateCommand("max_by_height", new MaxBYheightCommand());
+        CreateCommand("print_descending", new PrintDescendingCommand());
     }
 
     public void ExecuteCommand(String s){
@@ -45,7 +45,7 @@ public class CommandList {
     }
 
     public void Help(){
-        col_manager.app.Write("Иформация о командах");
+        col_manager.app.Write("Информация о командах");
 
         Set<String> keys = commandMap.keySet();
 

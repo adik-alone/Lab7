@@ -4,7 +4,7 @@ import exception.RangeException;
 
 public class Date {
     int year;
-    int mounth;
+    int month;
     int day;
     int hour;
     int minute;
@@ -16,9 +16,9 @@ public class Date {
         this.year = year;
     }
 
-    public void setMounth(int mounth) throws RangeException{
-        if((mounth <= 0) || (mounth > 12)) throw new RangeException();
-        this.mounth = mounth;
+    public void setMonth(int month) throws RangeException{
+        if((month <= 0) || (month > 12)) throw new RangeException();
+        this.month = month;
     }
 
     public void setDay(int day) throws RangeException{
@@ -40,8 +40,8 @@ public class Date {
         return year;
     }
 
-    public int getMounth() {
-        return mounth;
+    public int getMonth() {
+        return month;
     }
 
     public int getDay() {
