@@ -79,9 +79,9 @@ public class AppClient {
                 for (int i = 0; i < requests.length; i++) {
                     System.out.println(requests[i]);
                 }
-                System.out.println("Должны соеденится с сервером");
+                System.out.println("Должны соединиться с сервером");
                 ConnectingToServer(requests);
-                System.out.println("Должные отправить запрос");
+                System.out.println("Должны отправить запрос");
 //                SendRequest(requests);
                 System.out.println("");
                 requestFactory.Clear();
