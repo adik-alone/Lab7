@@ -13,8 +13,11 @@ import java.net.SocketException;
 public class Server {
     public static void main (String[] args){
 
+        ObjectInputStream in;
+        DataOutputStream out;
+
         App app = new App();
-        int port = 5555;
+        int port = 7777;
 
         CollectionManager collection = new CollectionManagerServer(app);
         CommandList list = new CommandList(collection);
@@ -31,24 +34,40 @@ public class Server {
                 Socket client = serverSocket.accept();
                 System.out.println("Клиент в конекте");
 
-                ObjectInputStream in = new ObjectInputStream(client.getInputStream());
+                in = new ObjectInputStream(client.getInputStream());
                 //Stream to user
-                DataOutputStream out = new DataOutputStream(client.getOutputStream());
+                out = new DataOutputStream(client.getOutputStream());
 
                 System.out.println("Потоки созданы");
+
                 app.setInputStream(in);
                 app.setOutputStream(out);
+
+                try {
+                    Thread.sleep(1000);
+                } catch (InterruptedException e) {
+                    throw new RuntimeException(e);
+                }
+
+
                 System.out.println("Потоки подключены к приложению");
 
                 System.out.println("Начинаем общение с клиентом...");
-
+//                while (!client.isClosed()){
                     try {
+//                        Request[] requests = (Request[]) in.readObject();
+//                        for (Request request: requests){
+//                            System.out.println(request);
+//                        }
                         app.HandlerRequests();
-                    }catch (SocketException e){
+                    } catch (SocketException e) {
                         System.out.println("Пользователь принудительно разорвал соединение");
+                        e.printStackTrace();
+                        break;
                     } catch (ClassNotFoundException e) {
                         e.printStackTrace();
                     }
+//                }
                 app.Write("Зарос выполнен выполняем отключение от сервера");
                 in.close();
                 out.close();

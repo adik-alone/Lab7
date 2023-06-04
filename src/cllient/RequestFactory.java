@@ -20,7 +20,6 @@ public class RequestFactory {
         listOfRequest.add(currentServiceRequest);
     }
     public void SingleRequest(){
-        System.out.println("Мы здесь");
         currentRequest = CreateRequest();
         currentRequest.setCommand(app.list.getCurrentNameCommand());
         listOfRequest.add(currentRequest);

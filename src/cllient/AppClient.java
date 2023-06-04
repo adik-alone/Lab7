@@ -6,6 +6,7 @@ import exception.ScriptRecursionException;
 import person.Person;
 
 import java.io.*;
+import java.net.ConnectException;
 import java.net.Socket;
 import java.net.SocketException;
 import java.util.NoSuchElementException;
@@ -46,22 +47,29 @@ public class AppClient {
         list.setRequestFactory(requestFactory);
     }
     public void WaitCommand(){
-        try{
-            if(reader.Work()) {
-                line = reader.WaitData().trim();
-                if (!line.equals("")){
-                    if (singleLine.Check(line)){
-                        ChangeReader(singleLine);
-                        line = singleLine.WaitData();
+            try {
+                while (true) {
+                    if (reader.Work()) {
+                        line = reader.WaitData().trim();
+                        if (!line.equals("")) {
+                            if (singleLine.Check(line)) {
+                                ChangeReader(singleLine);
+                                line = singleLine.WaitData();
+                            }
+                            try {
+                                GetCommand(line);
+                                break;
+                            }catch (NullPointerException e){
+                                System.out.println("Хорошая попытка, попробуйте снова. Команда help выведет информацию о всех командах");
+                            }
+                        }
+                    } else {
+                        ChangeReader(consol);
                     }
-                    GetCommand(line);
                 }
-            }else{
-                ChangeReader(consol);
+            } catch (NoSuchElementException e) {
+                System.out.println("Экстренный выход");
             }
-        }catch (NoSuchElementException e){
-            System.out.println("Экстренный выход");
-        }
     }
 
     public void Work(){
@@ -81,29 +89,24 @@ public class AppClient {
                 }
                 System.out.println("Должны соеденится с сервером");
                 ConnectingToServer(requests);
-                System.out.println("Должные отправить запрос");
-//                SendRequest(requests);
-                System.out.println("");
-                requestFactory.Clear();
-                System.out.println("Очистили фабрику");
-                System.out.println("Конец выполнения запроса");
-                System.out.println("===============================");
-
-                System.out.println("Сервер пытается ответить");
-                System.out.println("reading...");
-                try {
-                    Thread.sleep(1000);
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
-                try {
-                    while (in.available() != 0) {
-                        String s = in.readUTF();
-                        System.out.println(s);
-                    }
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
+//                System.out.println("Должны отправить запрос");
+////                SendRequest(requests);
+//                System.out.println("");
+//                requestFactory.Clear();
+//                System.out.println("Очистили фабрику");
+//                System.out.println("Конец выполнения запроса");
+//                System.out.println("===============================");
+//
+//                System.out.println("Сервер пытается ответить");
+//                System.out.println("reading...");
+//                try {
+//                    while (in.available() != 0) {
+//                        String s = in.readUTF();
+//                        System.out.println(s);
+//                    }
+//                } catch (IOException e) {
+//                    e.printStackTrace();
+//                }
             }catch (SocketException e){
                 e.printStackTrace();
             }
@@ -112,17 +115,41 @@ public class AppClient {
 
 
     public void ConnectingToServer(Request[] requests) throws SocketException{
-        try(Socket socket = new Socket("localhost", 5555);
+        try(Socket socket = new Socket("localhost", 7777);
             ObjectOutputStream outS = new ObjectOutputStream(socket.getOutputStream());
             DataInputStream inS = new DataInputStream(socket.getInputStream());) {
             System.out.println("Создал потоки");
             in = inS;
             out = outS;
-
-            outS.writeObject(requests);
             System.out.println("Подключился к серверу и начинаю работу...");
             System.out.println("+++++++++++++++++++++++++++++++++++++++++");
-        }catch (IOException e){
+
+
+            System.out.println("Должны отправить запрос");
+            SendRequest(requests);
+            System.out.println("");
+            requestFactory.Clear();
+            System.out.println("Очистили фабрику");
+            System.out.println("Конец выполнения запроса");
+            System.out.println("===============================");
+            try {
+                Thread.sleep(3000);
+                System.out.println("Сервер пытается ответить");
+                System.out.println("reading...");
+                while (in.available() > 0) {
+                    String s = in.readUTF();
+                    System.out.println(s);
+                }
+            } catch (IOException e) {
+                e.printStackTrace();
+            } catch (InterruptedException e) {
+                throw new RuntimeException(e);
+            }
+
+
+        } catch (ConnectException e){
+            System.out.println("В данный момент сервер не работает, ведутся технические работы. Повотрите попытку через несколько минут");
+        } catch (IOException e){
             e.printStackTrace();
         }
     }
@@ -137,6 +164,7 @@ public class AppClient {
 //        }
         try {
             out.writeObject(requests);
+            out.flush();
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -148,14 +176,8 @@ public class AppClient {
     public void PrepareRequest(){
         requestFactory.CreateServiceRequest();
     }
-    public void GetCommand(String Line){
-        try{
-            list.ExecuteCommand(Line);
-        }catch (NullPointerException e){
-            System.out.println("Хорошая попытка, попробуйте снова. Команда help выведет информацию о всех командах");
-//            e.printStackTrace();
-        }
-
+    public void GetCommand(String Line) throws NullPointerException{
+        list.ExecuteCommand(Line);
     }
     public void finish(){
         work = false;
@@ -180,10 +202,6 @@ public class AppClient {
         }
     }
 
-
-    public void remove(){
-
-    }
 
 
 

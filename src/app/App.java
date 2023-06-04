@@ -14,18 +14,18 @@ public class App {
     CreatorServer creator;
     Reader reader;
     XmlWorker xmlworker;
-    ObjectInputStream in;
-    DataOutputStream out;
-
+    ObjectInputStream in = null;
+    DataOutputStream out = null;
     int amountRequest;
-
     Request currentRequest;
 
-    public void setInputStream(ObjectInputStream in){
-        this.in = in;
+    public void setInputStream(ObjectInputStream inS){
+        this.in = inS;
+        System.out.println(in);
     }
-    public void setOutputStream(DataOutputStream out){
-        this.out = out;
+    public void setOutputStream(DataOutputStream outS){
+        this.out = outS;
+        System.out.println(out);
     }
 
     //блок инициализации
@@ -33,7 +33,6 @@ public class App {
         creator = new CreatorServer(this);
         work = true;
         String filename = "Collection.xml";
-//        String filename = System.getenv("PATH_COLLECTION");
         xmlworker = new XmlWorker(filename);
         xmlworker.parse();
         reader = xmlworker;
@@ -42,10 +41,12 @@ public class App {
     }
     public void Write(String s){
         try{
+            System.out.println(out);
             out.writeUTF(s);
             out.flush();
         }catch (IOException e){
             System.out.println("Клиент отключился");
+            e.printStackTrace();
         }
     }
     public void Write(Person p){
@@ -61,20 +62,32 @@ public class App {
 //    блок работы
 //    ---------------
     public void HandlerRequests() throws IOException, ClassNotFoundException{
-//        amountRequest();
-        System.out.println("Хочу прочитать массив");
-        while(in.available() > 0) {
-            System.out.println("Окей, мы здесь");
-            Request[] requests = (Request[]) in.readObject();
-            for( Request request: requests){
-                System.out.println(request);
-            }
+        System.out.println("Пытаюсь прочитать");
+        try {
+            Thread.sleep(1000);
+        }catch (InterruptedException e) {
+            throw new RuntimeException(e);
         }
-        System.out.println("Вот тут ввод должен завершиться");
+        try{
+            System.out.println(in.available());
+//            while (in.available() > 0) {
+                System.out.println("В потоке есть данные");
+                System.out.println("Начинаю читать");
+                Request[] requests = (Request[]) in.readObject();
+                System.out.println("Прочитал");
+                for (Request request : requests) {
+                    System.out.println(request);
+                    if (request.getCommand() != null) {
+                        currentRequest = request;
+                        acceptRequest(request);
+                    }
+                }
+//            }
+        }catch (IOException e){
+            e.printStackTrace();
+        }
 
-//        for (int i = 0; i < amountRequest; i++){
-//            readRequest();
-//        }
+
     }
     public void amountRequest()throws IOException, ClassNotFoundException{
         System.out.println("Ожидаю службный запрос");
@@ -109,11 +122,11 @@ public class App {
 
 
     public void GetCommand(String Line){
-        try{
+//        try{
             list.ExecuteCommand(Line);
-        }catch (NullPointerException e){
-            Write("Хорошая попытка, попробуйте снова. Команда help выведет информацию о всех командах");
-        }
+//        }catch (NullPointerException e){
+//            Write("Хорошая попытка, попробуйте снова. Команда help выведет информацию о всех командах");
+//        }
     }
 
     public Person creationStartPerson() {
