@@ -14,7 +14,7 @@ public class CreatorClient extends Creator {
         return app.reader.WaitData().trim();
     }
     public Person createPersonWithoutID(){
-        p = new Person();
+        p = new Person(0);
         NameAsk();
         CoordinatesAsker();
         HeightAsker();

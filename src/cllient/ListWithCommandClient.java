@@ -1,10 +1,7 @@
 package cllient;
 
-import cllient.commands.PersonCommand;
-import cllient.commands.ScriptCommand;
-import cllient.commands.SingleCommand;
+import cllient.commands.*;
 import commands.Command;
-import cllient.commands.CommandClient;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -24,16 +21,15 @@ public class ListWithCommandClient {
         CreateCommand("help", new SingleCommand());
         CreateCommand("info", new SingleCommand());
         CreateCommand("show", new SingleCommand());
-//        CreateCommand("clear", );
-//        CreateCommand("average_of_height",);
-//        CreateCommand("max_by_height", );
-//        CreateCommand("print_descending",);
-//        CreateCommand("execute_script",);
-//        CreateCommand("remove_by_id",);
+        CreateCommand("clear", new SingleCommand());
+        CreateCommand("average_of_height", new SingleCommand());
+        CreateCommand("max_by_height", new SingleCommand());
+        CreateCommand("print_descending",new SingleCommand());
+        CreateCommand("remove_by_id", new OneCommand());
         CreateCommand("add", new PersonCommand());
-//        CreateCommand("add_if_max",);
-//        CreateCommand("add_if_min",);
-//        CreateCommand("remove_lower",);
+        CreateCommand("add_if_max", new PersonCommand());
+        CreateCommand("add_if_min",new PersonCommand());
+        CreateCommand("remove_lower",new PersonCommand());
 //        CreateCommand("update",);
         CreateCommand("execute_script", new ScriptCommand());
     }

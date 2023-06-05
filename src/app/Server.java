@@ -9,15 +9,21 @@ import java.io.ObjectInputStream;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.net.SocketException;
+import java.util.Scanner;
 
 public class Server {
     public static void main (String[] args){
+        int port = 7777;
+
+//        System.out.println("Введите порт на котором будет базироваться сервер");
+//        Scanner scanner = new Scanner(System.in);
+//        port = scanner.nextInt();
 
         ObjectInputStream in;
         DataOutputStream out;
 
         App app = new App();
-        int port = 7777;
+
 
         CollectionManager collection = new CollectionManagerServer(app);
         CommandList list = new CommandList(collection);
@@ -68,11 +74,18 @@ public class Server {
                         e.printStackTrace();
                     }
 //                }
-                app.Write("Зарос выполнен выполняем отключение от сервера");
+                app.Write("Запрос выполнен. Выполняем отключение клиента от сервера");
                 in.close();
                 out.close();
                 client.close();
                 System.out.println("Клиент отключен...");
+
+                //Можно доделать команды сервера...Нужно что-то не блокирующее. Или можно сделать во время тех перервывов, когда клиентов нет. Можно что-то придумать...
+//                if (scanner.hasNext()){
+//                    System.out.println("Запрос на серверную команду");
+//                    String command = scanner.nextLine();
+//                    app.HandlerServerCommand(command);
+//                }
             }
 
         }catch (IOException e){

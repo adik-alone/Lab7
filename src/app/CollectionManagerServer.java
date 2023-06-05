@@ -23,7 +23,15 @@ public class CollectionManagerServer extends CollectionManager{
         id = Integer.parseInt(app.getRequestData());
         final int ID = id;
 //        set = (TreeSet<Person>) set.stream().filter(p -> p.getId() != ID).collect(Collectors.toSet());
-        set.stream().filter(p -> p.getId() == ID).forEach(p -> set.remove(p));
+//        set.stream().filter(p -> p.getId() == ID).forEach(p -> set.remove(p));
+        for(Person p: set){
+            if (p.getId() == id){
+                set.remove(p);
+                app.Write("+++SUCCESS+++");
+                return;
+            }
+        }
+        app.Write("Такого элемента не найдено");
     }
     @Override
     public void Add(){

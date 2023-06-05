@@ -15,14 +15,9 @@ import java.util.Scanner;
 public class AppClient {
     ListWithCommandClient list;
     CreatorClient creator;
-    Request currentRequest;
-    Request serviceRequest;
     Request[] requests;
-
     ObjectOutputStream out;
     DataInputStream in;
-
-//    ТОТ
 
     RequestFactory requestFactory;
     //////////////////////////////////////////////////////////////////////////////////
@@ -31,6 +26,10 @@ public class AppClient {
     ScriptExecuter scriptExecuter;
     Consol consol;
     SingleLine singleLine;
+
+    int port = 7777;
+
+    boolean ScriptMode = false;
     boolean work = true;
     //блок инициализации
     public void start(){
@@ -46,24 +45,36 @@ public class AppClient {
         creator = new CreatorClient(this);
         list.setRequestFactory(requestFactory);
     }
+
+    public void setPort(int port) {
+        this.port = port;
+    }
+
     public void WaitCommand(){
             try {
                 while (true) {
                     if (reader.Work()) {
                         line = reader.WaitData().trim();
                         if (!line.equals("")) {
+//                            Одна строка не работает в скриптах
                             if (singleLine.Check(line)) {
+//                                Reader r = reader;
                                 ChangeReader(singleLine);
                                 line = singleLine.WaitData();
+//                                ChangeReader(r);
                             }
                             try {
                                 GetCommand(line);
+                                if (!reader.Work()) ChangeReader(consol);
                                 break;
                             }catch (NullPointerException e){
                                 System.out.println("Хорошая попытка, попробуйте снова. Команда help выведет информацию о всех командах");
                             }
                         }
                     } else {
+                        if (reader.equals(scriptExecuter)){
+                            ScriptMode = false;
+                        }
                         ChangeReader(consol);
                     }
                 }
@@ -80,6 +91,9 @@ public class AppClient {
                 while (reader.equals(scriptExecuter)) {
                     WaitCommand();
                 }
+//                while (ScriptMode){
+//                    WaitCommand();
+//                }
                 requestFactory.EndOfService();
                 requests = requestFactory.DoneRequest();
 
@@ -115,7 +129,7 @@ public class AppClient {
 
 
     public void ConnectingToServer(Request[] requests) throws SocketException{
-        try(Socket socket = new Socket("localhost", 7777);
+        try(Socket socket = new Socket("localhost", port);
             ObjectOutputStream outS = new ObjectOutputStream(socket.getOutputStream());
             DataInputStream inS = new DataInputStream(socket.getInputStream());) {
             System.out.println("Создал потоки");
@@ -195,6 +209,7 @@ public class AppClient {
             String file_name = reader.WaitData();
             scriptExecuter.openFile(file_name);
             ChangeReader(scriptExecuter);
+            ScriptMode = true;
         } catch (FileNotFoundException e) {
             System.out.println("Такого файла не существует попробуйте снова");
         }catch (ScriptRecursionException e){

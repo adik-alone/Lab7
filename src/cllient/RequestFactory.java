@@ -30,6 +30,14 @@ public class RequestFactory {
         currentRequest.setCreatedPerson(app.creator.createPersonWithoutID());
         listOfRequest.add(currentRequest);
     }
+    public void OneRequest(){
+        currentRequest = CreateRequest();
+        currentRequest.setCommand(app.list.getCurrentNameCommand());
+        //Надо добавить исключение на невалидные данные....
+        System.out.println("Введидет доп данные. Возможно сейчас это id");
+        currentRequest.setData(app.reader.WaitData());
+        listOfRequest.add(currentRequest);
+    }
     public Request getCurrentRequest(){
         return currentRequest;
     }

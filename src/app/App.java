@@ -89,6 +89,8 @@ public class App {
 
 
     }
+
+    //если вдруг начнуться проблемы с размером передаваемых данных
     public void amountRequest()throws IOException, ClassNotFoundException{
         System.out.println("Ожидаю службный запрос");
         if (in.available() > 0) {
@@ -140,16 +142,11 @@ public class App {
         return creator.createPerson(id, reader);
     }
 
-//    public void executeScript(){
-//        try {
-//            Write("Введите путь до файла");
-//            String file_name = reader.WaitData();
-//            scriptExecuter.openFile(file_name);
-//            ChangeReader(scriptExecuter);
-//        } catch (FileNotFoundException e) {
-//            Write("Такого файла не существует попробуйте снова");
-//        }catch (ScriptRecursionException e){
-//            Write("Вы создали рекурсию скриптов. Сейчас я смог с этим справиться, но впредь не стоит так делать!");
-//        }
-//    }
+
+
+    public void HandlerServerCommand(String s){
+        s = s.trim();
+        if (s.equals("save")) list.ExecuteCommand(s);
+    }
+
 }
