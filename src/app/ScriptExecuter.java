@@ -16,7 +16,6 @@ public class ScriptExecuter implements Reader {
     Scanner scanner;
     public String WaitData(){
         String line = listScanner.get(listScanner.size() - 1).nextLine();
-//        String line = scanner.nextLine();
         System.out.println(line);
         return line;
     }
@@ -25,11 +24,11 @@ public class ScriptExecuter implements Reader {
         if(!listScanner.get(listScanner.size() - 1).hasNext()){
             if(listScanner.size() == 1){
                 RemoveLast();
-                CloseScaner();
+                CloseScanner();
                 return false;
             }else{
                 RemoveLast();
-                CloseScaner();
+                CloseScanner();
                 return true;
             }
         }
@@ -44,7 +43,7 @@ public class ScriptExecuter implements Reader {
         listScanner.add(scanner);
     }
 
-    public void CloseScaner(){
+    public void CloseScanner(){
         listScanner.remove(listScanner.size()-1);
     }
 

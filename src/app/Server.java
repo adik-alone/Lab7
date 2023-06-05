@@ -1,8 +1,5 @@
 package app;
 
-import cllient.Request;
-
-import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
 import java.io.ObjectInputStream;
@@ -38,7 +35,7 @@ public class Server {
                 System.out.println("Ожидание клиента:");
                 System.out.println("----------------");
                 Socket client = serverSocket.accept();
-                System.out.println("Клиент в конекте");
+                System.out.println("Клиент подключен");
 
                 in = new ObjectInputStream(client.getInputStream());
                 //Stream to user

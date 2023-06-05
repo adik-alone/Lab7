@@ -125,11 +125,11 @@ public class CreatorServer extends Creator {
     protected void BirthdayAsker(){
         Date birthday = new Date();
         YearAsker(birthday);
-        MounthAsker(birthday);
+        MonthAsker(birthday);
         DayAsker(birthday);
         HourAsker(birthday);
         MinuteAsker(birthday);
-        p.setBirthday(LocalDateTime.of(birthday.getYear(), birthday.getMounth(), birthday.getDay(), birthday.getHour(), birthday.getMinute()));
+        p.setBirthday(LocalDateTime.of(birthday.getYear(), birthday.getMonth(), birthday.getDay(), birthday.getHour(), birthday.getMinute()));
     }
     public void YearAsker(Date birthday) {
         while(true){
@@ -144,11 +144,11 @@ public class CreatorServer extends Creator {
             }
         }
     }
-    public void MounthAsker(Date birthday) {
+    public void MonthAsker(Date birthday) {
         while(true){
             try {
 //                System.out.println("Введите месяц рождения, помните, что их всего 12");
-                birthday.setMounth(Integer.parseInt(WaitData()));
+                birthday.setMonth(Integer.parseInt(WaitData()));
                 break;
             } catch (RangeException e) {
 //                System.out.println("Не попали");

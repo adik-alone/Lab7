@@ -32,7 +32,7 @@ public class CollectionManager {
     }
 
     public void Add(){
-        app.Write("Добовляем элемент ");
+        app.Write("Добавляем элемент ");
         Person person;
         try{
             person = app.createPerson(set.last().getId() + 1);
@@ -136,7 +136,7 @@ public class CollectionManager {
         Person p = app.createPerson(set.last().getId() + 1);
         for (Person p1: set){
             if (p1.getHeight() > p.getHeight()){
-                app.Write("Сущестует больший элемент");
+                app.Write("Существует больший элемент");
                 app.Write("+++SUCCESS+++");
                 return;
             }
@@ -149,7 +149,7 @@ public class CollectionManager {
         Person p = app.createPerson(set.last().getId() + 1);
         for (Person p1: set){
             if (p1.getHeight() < p.getHeight()){
-                app.Write("Сущестует меньший элемент");
+                app.Write("Существует меньший элемент");
                 app.Write("+++SUCCESS+++");
                 return;
             }

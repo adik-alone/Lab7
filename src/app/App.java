@@ -92,7 +92,7 @@ public class App {
 
     //если вдруг начнуться проблемы с размером передаваемых данных
     public void amountRequest()throws IOException, ClassNotFoundException{
-        System.out.println("Ожидаю службный запрос");
+        System.out.println("Ожидаю служебный запрос");
         if (in.available() > 0) {
             Request r = (Request) in.readObject();
             amountRequest = Integer.parseInt(r.getData());

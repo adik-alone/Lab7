@@ -4,12 +4,9 @@ import org.w3c.dom.*;
 import org.xml.sax.SAXException;
 import person.Person;
 
-import javax.management.StringValueExp;
-import javax.print.Doc;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
-import javax.xml.stream.XMLInputFactory;
 import javax.xml.transform.Transformer;
 import javax.xml.transform.TransformerException;
 import javax.xml.transform.TransformerFactory;
@@ -34,16 +31,13 @@ public class XmlWorker implements Reader{
 
     public void prepare(){
         try{
-            XMLInputFactory input = XMLInputFactory.newInstance();
             DocumentBuilder documentBuilder = DocumentBuilderFactory.newNSInstance().newDocumentBuilder();
 
             document = documentBuilder.parse(filename);
 
         }catch (ParserConfigurationException e) {
             e.printStackTrace(System.out);
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        } catch (SAXException e) {
+        } catch (IOException | SAXException e) {
             throw new RuntimeException(e);
         }
     }
@@ -102,8 +96,8 @@ public class XmlWorker implements Reader{
         Element creationTime = document.createElement("CreationDate");
         Element height = document.createElement("height");
         Element birthday = document.createElement("birthday");
-        Element eyecolor = document.createElement("EyeColor");
-        Element haircolor = document.createElement("HairColor");
+        Element eye_color = document.createElement("EyeColor");
+        Element hair_color = document.createElement("HairColor");
         Element location = document.createElement("Location");
 
         Element coordinates_x = document.createElement("coordinates_x");
@@ -118,8 +112,8 @@ public class XmlWorker implements Reader{
         creationTime.setTextContent(String.valueOf(p.getCreationDate()));
         height.setTextContent(String.valueOf(p.getHeight()));
         birthday.setTextContent(String.valueOf(p.getBirthday()));
-        eyecolor.setTextContent(String.valueOf(p.getEyeColor()));
-        haircolor.setTextContent(String.valueOf(p.getHairColor()));
+        eye_color.setTextContent(String.valueOf(p.getEyeColor()));
+        hair_color.setTextContent(String.valueOf(p.getHairColor()));
 
         coordinates_x.setTextContent(String.valueOf(p.getCoordinates().getX()));
         coordinates_y.setTextContent(String.valueOf(p.getCoordinates().getY()));
@@ -141,8 +135,8 @@ public class XmlWorker implements Reader{
         person.appendChild(creationTime);
         person.appendChild(height);
         person.appendChild(birthday);
-        person.appendChild(eyecolor);
-        person.appendChild(haircolor);
+        person.appendChild(eye_color);
+        person.appendChild(hair_color);
         person.appendChild(location);
 
         root.appendChild(person);
@@ -150,7 +144,6 @@ public class XmlWorker implements Reader{
 
 
     public void save(TreeSet<Person> set) throws IOException {
-        int l = set.size();
         for (int i = 0; i< 10; i++){
             ClearDOM(document);
         }
@@ -174,39 +167,23 @@ public class XmlWorker implements Reader{
     }
     public void ClearDOM(Document document) throws IOException  {
         Node root = document.getDocumentElement();
-//        System.out.println(root);
-//        for(int i = 0; i< root.getChildNodes().getLength(); i++){
-//            System.out.println(root.getChildNodes().item(i));
-//        }
-//        System.out.println("_______________________________________");
-//        System.out.println(root.getChildNodes().getLength());
         for(int i = 0; i < root.getChildNodes().getLength(); i++){
             if (root.hasChildNodes()){
                 root.removeChild(root.getChildNodes().item(i));
             }
         }
-//        System.out.println(root);
-//        for(int i = 0; i< root.getChildNodes().getLength(); i++){
-//            System.out.println(root.getChildNodes().item(i));
-//        }
     }
 
     public void HowMany(){
-        amount = (int)(outLines.size()/12);
+        amount = outLines.size()/12;
     }
     @Override
     public boolean Work() {
-        if (outLines.size() - now_line > 1) {
-            return true;
-        }
-        return false;
+        return outLines.size() - now_line > 1;
     }
     @Override
     public String WaitData() {
         now_line += 1;
         return outLines.get(now_line - 1);
-    }
-    public Document getDocument() {
-        return document;
     }
 }

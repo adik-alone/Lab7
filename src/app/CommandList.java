@@ -44,7 +44,7 @@ public class CommandList {
     }
 
     public void Help(){
-        col_manager.app.Write("Иформация о командах");
+        col_manager.app.Write("Информация о командах");
 
         Set<String> keys = commandMap.keySet();
 

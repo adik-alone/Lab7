@@ -1,6 +1,7 @@
 package cllient;
 
 import app.*;
+import app.Console;
 import app.Reader;
 import exception.ScriptRecursionException;
 import person.Person;
@@ -19,12 +20,14 @@ public class AppClient {
     ObjectOutputStream out;
     DataInputStream in;
 
+//    ТОТ
+
     RequestFactory requestFactory;
-    //////////////////////////////////////////////////////////////////////////////////
+    //--
     Reader reader;
     String line;
     ScriptExecuter scriptExecuter;
-    Consol consol;
+    Console console;
     SingleLine singleLine;
 
     int port = 7777;
@@ -33,10 +36,10 @@ public class AppClient {
     boolean work = true;
     //блок инициализации
     public void start(){
-        consol = new Consol(new Scanner(System.in));
+        console = new Console(new Scanner(System.in));
         scriptExecuter = new ScriptExecuter();
         singleLine = new SingleLine();
-        reader = consol;
+        reader = console;
         requestFactory = new RequestFactory();
         requestFactory.setApp(this);
         list = new ListWithCommandClient();
@@ -65,7 +68,7 @@ public class AppClient {
                             }
                             try {
                                 GetCommand(line);
-                                if (!reader.Work()) ChangeReader(consol);
+                                if (!reader.Work()) ChangeReader(console);
                                 break;
                             }catch (NullPointerException e){
                                 System.out.println("Хорошая попытка, попробуйте снова. Команда help выведет информацию о всех командах");
@@ -75,7 +78,7 @@ public class AppClient {
                         if (reader.equals(scriptExecuter)){
                             ScriptMode = false;
                         }
-                        ChangeReader(consol);
+                        ChangeReader(console);
                     }
                 }
             } catch (NoSuchElementException e) {
@@ -101,7 +104,7 @@ public class AppClient {
                 for (int i = 0; i < requests.length; i++) {
                     System.out.println(requests[i]);
                 }
-                System.out.println("Должны соеденится с сервером");
+                System.out.println("Должны соединиться с сервером");
                 ConnectingToServer(requests);
 //                System.out.println("Должны отправить запрос");
 ////                SendRequest(requests);
@@ -195,7 +198,7 @@ public class AppClient {
     }
     public void finish(){
         work = false;
-        consol.CloseStream();
+        console.CloseStream();
     }
     public void ChangeReader(Reader r){
         reader = r;
