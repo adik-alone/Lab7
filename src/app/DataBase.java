@@ -13,9 +13,9 @@ import java.util.random.*;
 
 public class DataBase {
     App app;
-    String url = "jdbc:postgresql://localhost:5432/studs";
-    String user = "s367600";
-    String password_Admin = "flTGJGDSl6vRmGtQ";
+    String url = "";
+    String user = "";
+    String password_Admin = "";
     Connection connection;
     TreeSet<Person> set;
 
