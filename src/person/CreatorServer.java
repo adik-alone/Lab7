@@ -1,5 +1,8 @@
-package app;
+package person;
 
+import app.App;
+import app.Date;
+import app.Reader;
 import person.*;
 
 import java.time.LocalDateTime;
@@ -45,6 +48,9 @@ public class CreatorServer extends Creator {
         HairColorAsker();
         LocationAsker();
         return p;
+    }
+    public Person createPerson(int id, String name, Long cor_x, Double cor_y, double height, LocalDateTime birthday, ColorEye eye, ColorHair hair, LocalDateTime createTime, int loc_x, double loc_y, Double loc_z){
+        return  new Person(id, name, cor_x, cor_y, height, birthday, eye, hair, createTime, loc_x, loc_y, loc_z);
     }
 
     protected void IdAsker(){

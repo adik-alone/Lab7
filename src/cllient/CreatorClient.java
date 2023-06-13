@@ -1,7 +1,6 @@
 package cllient;
 
-import app.Creator;
-import app.CreatorServer;
+import person.Creator;
 import person.Person;
 
 public class CreatorClient extends Creator {

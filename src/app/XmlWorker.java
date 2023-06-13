@@ -45,7 +45,7 @@ public class XmlWorker implements Reader{
         return (n.getNodeType() != Node.TEXT_NODE);
     }
 //  Для парсинга полей-классов
-    public void getSomthingBig(Node n){
+    public void getSomethingBig(Node n){
         NodeList pols = n.getChildNodes();
         for (int i = 0; i < pols.getLength(); i++){
             Node pol = pols.item(i);
@@ -71,9 +71,9 @@ public class XmlWorker implements Reader{
                     Node personProperty = personProperties.item(j);
 
                     if (personProperty.getNodeName().equals("Location")) {
-                        getSomthingBig(personProperty);
+                        getSomethingBig(personProperty);
                     } else if (personProperty.getNodeName().equals("Coordinates")) {
-                        getSomthingBig(personProperty);
+                        getSomethingBig(personProperty);
                     } else {
                         if (nodeTrier(personProperty)) {
                             outLines.add(personProperty.getChildNodes().item(0).getTextContent());

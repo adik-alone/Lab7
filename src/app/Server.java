@@ -7,14 +7,16 @@ import java.net.ServerSocket;
 import java.net.Socket;
 import java.net.SocketException;
 import java.util.Scanner;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ForkJoinPool;
 
 public class Server {
-    public static void main (String[] args){
-        int port = 7777;
 
-//        System.out.println("Введите порт на котором будет базироваться сервер");
-//        Scanner scanner = new Scanner(System.in);
-//        port = scanner.nextInt();
+    static ExecutorService executeIt = Executors.newFixedThreadPool(2);
+    static ForkJoinPool forkJoinPool = new ForkJoinPool(2);
+    public static void main (String[] args){
+        int port = 5001;
 
         ObjectInputStream in;
         DataOutputStream out;
@@ -23,18 +25,19 @@ public class Server {
 
 
         CollectionManager collection = new CollectionManagerServer(app);
-        CommandList list = new CommandList(collection);
+        CommandList list = new CommandList(collection, app);
         list.CreateList();
         app.start(list);
 
         System.out.println("Сервер начинает работу на порте " + port);
 
-        try(ServerSocket serverSocket = new ServerSocket(port)){
+        try {
+            ServerSocket serverSocket = new ServerSocket(port);
             while(true) {
-                System.out.println("");
-                System.out.println("Ожидание клиента:");
+                System.out.println("\nОжидание клиента:");
                 System.out.println("----------------");
                 Socket client = serverSocket.accept();
+//                forkJoinPool.invoke(new Thread());
                 System.out.println("Клиент подключен");
 
                 in = new ObjectInputStream(client.getInputStream());
@@ -56,12 +59,7 @@ public class Server {
                 System.out.println("Потоки подключены к приложению");
 
                 System.out.println("Начинаем общение с клиентом...");
-//                while (!client.isClosed()){
                     try {
-//                        Request[] requests = (Request[]) in.readObject();
-//                        for (Request request: requests){
-//                            System.out.println(request);
-//                        }
                         app.HandlerRequests();
                     } catch (SocketException e) {
                         System.out.println("Пользователь принудительно разорвал соединение");

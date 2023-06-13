@@ -9,6 +9,12 @@ import java.io.Serializable;
 public class Coordinates implements Serializable {
     private Long x; //Поле не может быть null
     private Double y; //Максимальное значение поля: 55, Поле не может быть null
+
+    protected Coordinates(Long x, Double y){
+        this.x = x;
+        this.y = y;
+    }
+    public Coordinates(){}
     public void setY (Double y) throws NotBeNullException, RangeException {
         if (y.equals("")) throw new NotBeNullException();
         if (y == Double.NEGATIVE_INFINITY) throw new IllegalArgumentException();

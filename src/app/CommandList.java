@@ -11,10 +11,13 @@ public class CommandList {
 
      public CollectionManager col_manager;
 
+     public App app;
+
     Map<String, Command> commandMap = new HashMap<>();
 
-    public CommandList(CollectionManager col_manager){
+    public CommandList(CollectionManager col_manager, App app){
         this.col_manager = col_manager;
+        this.app = app;
     }
 
     private void CreateCommand (String name, Command command){
@@ -37,6 +40,7 @@ public class CommandList {
         CreateCommand("average_of_height", new AverageOFheightCommand());
         CreateCommand("max_by_height", new MaxBYheightCommand());
         CreateCommand("print_descending", new PrintDescendingCommand());
+        CreateCommand("registration", new RegistrationCommand());
     }
 
     public void ExecuteCommand(String s){

@@ -31,6 +31,18 @@ public class Person implements Comparable<Person>, Comparator<Person>, Serializa
         this.id = id;
         this.creationDate = LocalDateTime.now();
     }
+    protected Person(int id, String name, Long cor_x, Double cor_y, double height, LocalDateTime birthday, ColorEye eye, ColorHair hair, LocalDateTime createTime, int loc_x, double loc_y, Double loc_z){
+        this.id = id;
+        this.name = name;
+        this.coordinates = new Coordinates(cor_x, cor_y);
+        this.creationDate = createTime;
+        this.height = height;
+        this.birthday = birthday;
+        this.eyeColor = eye;
+        this.hairColor = hair;
+        this.location = new Location(loc_x, loc_y, loc_z);
+
+    }
     public Person(){}
 
 

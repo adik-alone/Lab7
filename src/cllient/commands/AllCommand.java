@@ -3,10 +3,8 @@ package cllient.commands;
 import app.CommandList;
 import cllient.ListWithCommandClient;
 
-public class OneCommand implements CommandClient{
-
+public class AllCommand implements CommandClient{
     ListWithCommandClient lwcc;
-
     @Override
     public void addToList(ListWithCommandClient l) {
         this.lwcc = l;
@@ -14,7 +12,7 @@ public class OneCommand implements CommandClient{
 
     @Override
     public void execute() {
-        lwcc.getApp().OneLineRequest();
+        lwcc.getApp().AllRequest();
     }
 
     @Override

@@ -7,13 +7,12 @@ public class PersonCommand implements CommandClient {
     ListWithCommandClient lwcc;
     @Override
     public void execute() {
-        lwcc.getRequestFactory().PersonRequest();
+        lwcc.getApp().PersonRequest();
     }
     @Override
     public String info() {
         return null;
     }
-
     @Override
     public void addToList(CommandList l) {
         return;

@@ -8,7 +8,6 @@ import java.util.Map;
 
 public class ListWithCommandClient {
     AppClient app;
-
     RequestFactory requestFactory;
     String nameCommand;
     Map<String, Command> commandList = new HashMap<>();
@@ -30,7 +29,7 @@ public class ListWithCommandClient {
         CreateCommand("add_if_max", new PersonCommand());
         CreateCommand("add_if_min",new PersonCommand());
         CreateCommand("remove_lower",new PersonCommand());
-//        CreateCommand("update",);
+        CreateCommand("update", new AllCommand());
         CreateCommand("execute_script", new ScriptCommand());
     }
 

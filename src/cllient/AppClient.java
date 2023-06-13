@@ -6,6 +6,7 @@ import app.Reader;
 import exception.ScriptRecursionException;
 import person.Person;
 
+import javax.sound.midi.Soundbank;
 import java.io.*;
 import java.net.ConnectException;
 import java.net.Socket;
@@ -19,18 +20,28 @@ public class AppClient {
     Request[] requests;
     ObjectOutputStream out;
     DataInputStream in;
-
-//    ТОТ
-
     RequestFactory requestFactory;
-    //--
     Reader reader;
     String line;
     ScriptExecuter scriptExecuter;
     Console console;
-    SingleLine singleLine;
+    BufferedReader br;
+//    SingleLine singleLine;
+//
+//    Внутренние перменные
+//
+//
+//
+//
+//
+    String command;
+    String login;
+    String password;
+    boolean enter = false;
 
-    int port = 7777;
+
+
+    int port = 5001;
 
     boolean ScriptMode = false;
     boolean work = true;
@@ -38,7 +49,7 @@ public class AppClient {
     public void start(){
         console = new Console(new Scanner(System.in));
         scriptExecuter = new ScriptExecuter();
-        singleLine = new SingleLine();
+//        singleLine = new SingleLine();
         reader = console;
         requestFactory = new RequestFactory();
         requestFactory.setApp(this);
@@ -60,12 +71,12 @@ public class AppClient {
                         line = reader.WaitData().trim();
                         if (!line.equals("")) {
 //                            Одна строка не работает в скриптах
-                            if (singleLine.Check(line)) {
-//                                Reader r = reader;
-                                ChangeReader(singleLine);
-                                line = singleLine.WaitData();
-//                                ChangeReader(r);
-                            }
+//                            if (singleLine.Check(line)) {
+////                                Reader r = reader;
+//                                ChangeReader(singleLine);
+//                                line = singleLine.WaitData();
+////                                ChangeReader(r);
+//                            }
                             try {
                                 GetCommand(line);
                                 if (!reader.Work()) ChangeReader(console);
@@ -84,6 +95,33 @@ public class AppClient {
             } catch (NoSuchElementException e) {
                 System.out.println("Экстренный выход");
             }
+    }
+    
+    public void StartApi(){
+        try{
+            br = new BufferedReader(new InputStreamReader(System.in));
+            System.out.println("Добро пожаловать в замечательное приложение");
+            System.out.println("===========================================");
+            System.out.println("У вас уже есть учётная запись? N/Y");
+            while (true) {
+                String ans = br.readLine().toUpperCase();
+                if (ans.equals("N")) {
+                    Registration();
+                    if(enter){
+                        break;
+                    }
+                } else if (ans.equals("Y")) {
+                    Login();
+                    if(enter){
+                        break;
+                    }
+                }else{
+                    System.out.println("Не могу распознать символов, попробуйте ещё раз");
+                }
+            }
+        }catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     public void Work(){
@@ -106,24 +144,6 @@ public class AppClient {
                 }
                 System.out.println("Должны соединиться с сервером");
                 ConnectingToServer(requests);
-//                System.out.println("Должны отправить запрос");
-////                SendRequest(requests);
-//                System.out.println("");
-//                requestFactory.Clear();
-//                System.out.println("Очистили фабрику");
-//                System.out.println("Конец выполнения запроса");
-//                System.out.println("===============================");
-//
-//                System.out.println("Сервер пытается ответить");
-//                System.out.println("reading...");
-//                try {
-//                    while (in.available() != 0) {
-//                        String s = in.readUTF();
-//                        System.out.println(s);
-//                    }
-//                } catch (IOException e) {
-//                    e.printStackTrace();
-//                }
             }catch (SocketException e){
                 e.printStackTrace();
             }
@@ -145,14 +165,15 @@ public class AppClient {
             System.out.println("Должны отправить запрос");
             SendRequest(requests);
             System.out.println("");
-            requestFactory.Clear();
+            requestFactory.ClearFactory();
             System.out.println("Очистили фабрику");
             System.out.println("Конец выполнения запроса");
             System.out.println("===============================");
             try {
-                Thread.sleep(3000);
+                Thread.sleep(1000);
                 System.out.println("Сервер пытается ответить");
                 System.out.println("reading...");
+                System.out.println("=========================");
                 while (in.available() > 0) {
                     String s = in.readUTF();
                     System.out.println(s);
@@ -193,7 +214,11 @@ public class AppClient {
     public void PrepareRequest(){
         requestFactory.CreateServiceRequest();
     }
+//    public void LogInRequest(){
+//        requestFactory.CreateRequest();
+//    }
     public void GetCommand(String Line) throws NullPointerException{
+        command = Line;
         list.ExecuteCommand(Line);
     }
     public void finish(){
@@ -203,6 +228,103 @@ public class AppClient {
     public void ChangeReader(Reader r){
         reader = r;
     }
+
+
+
+//
+//
+//    Регистрация или вход
+//
+//
+//
+
+    public void Registration() throws IOException{
+        System.out.println("Предлагаем вам завести её прямо сейчас");
+        while (true) {
+            System.out.println("Введите логин");
+            login = br.readLine();
+            System.out.println("Теперь введите пароль");
+            password = br.readLine();
+            System.out.println("Готово. Идёт регистрация, подождите пожалуйста");
+            command = "registration";
+            LoginRequest();
+            requests = requestFactory.DoneRequest();
+            ConnectingWithLogin(requests);
+            if (!enter) {
+                System.out.println("Имя пользовотелья уже существует, попробуйте снова");
+            } else {
+                System.out.println("Вы успешно зарегестрированы");
+                System.out.println("Можете вводить команды");
+                break;
+            }
+        }
+    }
+    public void Login() throws IOException{
+        while(true) {
+            System.out.println("Введие логин");
+            login = br.readLine();
+            System.out.println("Введите пароль");
+            password = br.readLine();
+            System.out.println("Авотризация, подождите пожалуйста");
+            command = "login";
+            LoginRequest();
+            requests = requestFactory.DoneRequest();
+            ConnectingWithLogin(requests);
+            if(enter){
+                System.out.println("Вход успешно выполнен");
+                System.out.println("Можете вводить команды");
+                break;
+            }
+            System.out.println("Логин или пароль введены неверно, попобуйте снова");
+        }
+    }
+    public void ConnectingWithLogin(Request[] requests)throws SocketException{
+        try(Socket socket = new Socket("localhost", port);
+            ObjectOutputStream outS = new ObjectOutputStream(socket.getOutputStream());
+            DataInputStream inS = new DataInputStream(socket.getInputStream());) {
+
+            in = inS;
+            out = outS;
+
+            SendRequest(requests);
+
+            requestFactory.ClearFactory();
+
+            Thread.sleep(1000);
+
+            enter = in.readBoolean();
+            while (in.available() > 0){
+                String s = in.readUTF();
+                System.out.println(s);
+            }
+        } catch (ConnectException e){
+            System.out.println("Сервер недоступен попробуйте позже");
+        } catch (IOException | InterruptedException e){
+            e.printStackTrace();
+        }
+    }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 //    ------------------
 //    исполнители команд
 //    ------------------
@@ -220,119 +342,22 @@ public class AppClient {
         }
     }
 
-
-
-
-
-
-
-
-
-
-
-//    public void GiveRequest(Request[] r){
-//        this.currentRequest = r;
-//    }
-
-
-
-
-
-
-
-
-
-
-
-
-
-//    public void start(BufferedReader br) {
-//        this.input = br;
-//        list = new ListWithCommandClient();
-//        list.setApp(this);
-//        list.Create();
-//        creator = new CreatorClient(this);
-//    }
-//
-//    public void Work(){
-//        while (true) {
-//            try {
-//                nameCommand = Read();
-//                if (!nameCommand.equals("")) {
-//                    list.CreateRequest(nameCommand);
-//                    break;
-//                    //Вроде можно и не выходить из цикла, пусть работает;
-//                }
-//            } catch (NoSuchElementException e) {
-//                System.out.println("Экстренный выход");
-//            }catch (NullPointerException e){
-//                System.out.println("Данной команды нет в списке." + "\n" + "Команда help выведет доступные команды");
-//            }
-//        }
-//    }
-//     public String Read() {
-//        try {
-//            String s = input.readLine().trim();
-//            System.out.println("Введёная строка --- " + s);
-//            return s;
-//        } catch (IOException e) {
-//            e.printStackTrace();
-//        }
-//        return "";
-//    }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-//    public Request CreateRequest(){
-//        return new Request();
-//    }
-//
-//    public void SingleRequest(){
-//        currentRequest = CreateRequest();
-//        currentRequest.setCommand(nameCommand);
-//    }
-//    public void PersonRequest(){
-//        currentRequest = CreateRequest();
-//        currentRequest.setCommand(nameCommand);
-//        currentRequest.setCreatedPerson(creator.createPersonWithoutID());
-//    }
-//    public Request getCurrentRequest(){
-//        return currentRequest;
-//    }
+    public void OnlyCommandRequest(){
+        requestFactory.CreateRequest(command);
+    }
+    public void OneLineRequest(){
+        requestFactory.CreateRequest(command, reader.WaitData());
+    }
+    public void PersonRequest(){
+        Person person = creator.createPersonWithoutID();
+        requestFactory.CreateRequest(command, person);
+    }
+    public void AllRequest(){
+        String data = reader.WaitData();
+        Person person = creator.createPersonWithoutID();
+        requestFactory.CreateRequest(command, data, person);
+    }
+    public void LoginRequest(){
+        requestFactory.CreateRequest(command, login + ":" + password);
+    }
 }

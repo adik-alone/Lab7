@@ -9,7 +9,7 @@ public class SingleCommand implements CommandClient {
 
     @Override
     public void execute() {
-        lwcc.getRequestFactory().SingleRequest();
+        lwcc.getApp().OnlyCommandRequest();
     }
     @Override
     public String info() {

@@ -1,5 +1,6 @@
-package app;
+package person;
 
+import app.Date;
 import exception.NotBeNullException;
 import exception.RangeException;
 import person.Coordinates;

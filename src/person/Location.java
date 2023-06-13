@@ -9,6 +9,14 @@ public class Location implements Serializable {
     private double y;
     private Double z; //Поле не может быть null
 
+    public Location(){}
+
+    protected Location(int x, double y, Double z){
+        this.x = x;
+        this.y = y;
+        this.z = z;
+    }
+
 
     public void setZ(Double z) throws NotBeNullException {
         if (z == Double.NEGATIVE_INFINITY) throw new IllegalArgumentException();
