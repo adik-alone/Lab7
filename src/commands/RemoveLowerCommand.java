@@ -6,7 +6,7 @@ public class RemoveLowerCommand implements Command {
     CommandList list;
     @Override
     public void execute() {
-        list.col_manager.removeLower();
+//        list.col_manager.removeLower();
     }
     @Override
     public String info() {

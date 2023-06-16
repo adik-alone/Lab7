@@ -8,7 +8,7 @@ public class SaveCommand implements Command{
     @Override
     public void execute() {
         System.out.println("save.execute");
-        this.list.col_manager.Save();
+//        this.list.col_manager.Save();
     }
 
     @Override

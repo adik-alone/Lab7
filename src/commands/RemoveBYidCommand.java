@@ -7,7 +7,9 @@ public class RemoveBYidCommand implements Command {
     CommandList list;
     @Override
     public void execute() {
-        list.col_manager.Remove();
+        System.out.println("remove.execute");
+//        list.col_manager.Remove();
+        list.getLock().Remove();
     }
 
     @Override

@@ -41,7 +41,7 @@ public class AppClient {
 
 
 
-    int port = 5001;
+    int port = 40000;
 
     boolean ScriptMode = false;
     boolean work = true;
@@ -292,9 +292,11 @@ public class AppClient {
 
             Thread.sleep(1000);
 
-            enter = in.readBoolean();
-            while (in.available() > 0){
-                String s = in.readUTF();
+            enter = inS.readBoolean();
+            System.out.println(enter);
+            while (inS.available() > 0){
+//                System.out.println(inS.available());
+                String s = inS.readUTF();
                 System.out.println(s);
             }
         } catch (ConnectException e){

@@ -9,7 +9,9 @@ public class ClearCommand implements Command {
     CommandList list;
 
     public void execute(){
-        list.col_manager.Clear();
+        System.out.println("clear.execute");
+//        list.col_manager.Clear();
+        list.getLock().Clear();
     }
 
     @Override

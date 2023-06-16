@@ -9,7 +9,8 @@ public class HelpCommand implements Command {
     @Override
     public void execute() {
         System.out.println("help.execute");
-        list.Help();
+//        list.Help();
+        list.getLock().Help();
     }
 
     @Override

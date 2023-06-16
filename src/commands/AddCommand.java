@@ -10,8 +10,10 @@ public class AddCommand implements Command {
     @Override
     public void execute() {
         System.out.println("add.execute");
-        list.col_manager.Add();
+//        list.col_manager.Add();
+        list.getLock().Add();
     }
+
 
     @Override
     public String info() {

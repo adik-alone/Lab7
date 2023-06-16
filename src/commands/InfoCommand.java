@@ -8,8 +8,11 @@ public class InfoCommand implements Command{
 
     @Override
     public void execute() {
-        list.col_manager.Info();
+        System.out.println("info.execute");
+//        list.col_manager.Info();
+        list.getLock().Info();
     }
+
 
     @Override
     public String info() {

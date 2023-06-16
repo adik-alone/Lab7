@@ -6,7 +6,7 @@ public class AddIFminCommand implements Command {
     CommandList list;
     @Override
     public void execute() {
-        list.col_manager.add_if_min();
+//        list.col_manager.add_if_min();
     }
 
     @Override

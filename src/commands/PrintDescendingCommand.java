@@ -6,7 +6,7 @@ public class PrintDescendingCommand implements Command {
     CommandList list;
     @Override
     public void execute() {
-        list.col_manager.PrintDescending();
+//        list.col_manager.PrintDescending();
     }
 
     @Override

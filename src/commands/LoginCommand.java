@@ -2,12 +2,12 @@ package commands;
 
 import app.CommandList;
 
-public class RegistrationCommand implements Command{
+public class LoginCommand implements Command{
     CommandList list;
-
     @Override
     public void execute() {
-        list.getLock().Registration();
+        System.out.println("I am in login command");
+        list.getLock().Login();
     }
 
     @Override

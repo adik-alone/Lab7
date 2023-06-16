@@ -9,8 +9,10 @@ public class ShowCommand implements Command {
     @Override
     public void execute() {
         System.out.println("show.execute");
-        list.col_manager.Show();
+//        list.col_manager.Show();
+        list.getLock().Show();
     }
+
 
     @Override
     public String info() {

@@ -6,7 +6,7 @@ public class AverageOFheightCommand implements Command {
     CommandList list;
     @Override
     public void execute() {
-        list.col_manager.average();
+//        list.col_manager.average();
     }
 
     @Override

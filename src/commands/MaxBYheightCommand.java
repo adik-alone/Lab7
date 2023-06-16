@@ -6,7 +6,7 @@ public class MaxBYheightCommand implements Command {
     CommandList list;
     @Override
     public void execute() {
-        list.col_manager.max_by_height();
+//        list.col_manager.max_by_height();
     }
 
     @Override

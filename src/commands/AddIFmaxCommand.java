@@ -6,7 +6,7 @@ public class AddIFmaxCommand implements Command {
     CommandList list;
     @Override
     public void execute() {
-        list.col_manager.add_if_max();
+//        list.col_manager.add_if_max();
     }
 
     @Override

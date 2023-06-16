@@ -6,7 +6,9 @@ public class UpdateCommand implements Command {
     CommandList list;
     @Override
     public void execute() {
-        list.col_manager.Update();
+        System.out.println("update.execute");
+//        list.col_manager.Update();
+        list.getLock().Update();
     }
 
     @Override
